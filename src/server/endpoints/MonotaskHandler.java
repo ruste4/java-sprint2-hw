@@ -1,13 +1,16 @@
 package server.endpoints;
 
-import com.sun.net.httpserver.Headers;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import server.helpers.QueryParamGetter;
+import tasks.MonoTask;
 import tasks.Task;
 import tasksmanagers.TaskManager;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -35,8 +38,7 @@ public class MonotaskHandler implements HttpHandler {
                 response = getMonotask.apply(exchange);
                 break;
             case "POST":
-                exchange.sendResponseHeaders(200, 0);
-                response = "тут я создаю новую задачу"; //todo незабудь исправить
+                response = createMonotask.apply(exchange);
                 break;
             default:
                 exchange.sendResponseHeaders(405, 0);
@@ -48,6 +50,32 @@ public class MonotaskHandler implements HttpHandler {
         }
 
     }
+
+    private Function<HttpExchange, String> createMonotask = exchange -> {
+        String response = "";
+        try {
+            InputStream inputStream = exchange.getRequestBody();
+            String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+            JsonElement jsonElement = JsonParser.parseString(body);
+            if (jsonElement.isJsonObject()) {
+                Task task = gson.fromJson(jsonElement, MonoTask.class);
+                boolean addedResult = taskManager.addNewTask(task);
+                if (addedResult) {
+                    exchange.sendResponseHeaders(201, 0);
+                } else {
+                    exchange.sendResponseHeaders(417, 0);
+
+                }
+            } else {
+                exchange.sendResponseHeaders(204, 0);
+                response = "Ответ от сервера не соответствует ожидаемому.";
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return response;
+    };
 
     private Function<HttpExchange, String> getMonotask = exchange -> {
         String response = "";

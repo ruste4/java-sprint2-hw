@@ -22,7 +22,6 @@ public class HttpTaskServer {
         this.taskManager = Managers.getFileBackedTasksManager();
 
         this.gson = new GsonBuilder()
-                .serializeNulls()
                 .registerTypeAdapter(Duration.class, new DurationAdapter())
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                 .setPrettyPrinting()
