@@ -28,6 +28,13 @@ public class FileBackedTasksManager extends BaseTaskManager {
     }
 
     @Override
+    public boolean updateTask(Task task, int id) {
+        boolean result = super.updateTask(task, id);
+        save();
+        return result;
+    }
+
+    @Override
     public boolean addNewTask(Task task) {
         boolean result = super.addNewTask(task);
         save();

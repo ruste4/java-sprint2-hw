@@ -32,13 +32,19 @@ public class MonotaskHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String method = exchange.getRequestMethod();
+        URI url = exchange.getRequestURI();
+        String query = url.getQuery();
         String response = "";
+
         switch (method) {
             case "GET":
-                response = getMonotask.apply(exchange);
+                response = getTask.apply(exchange);
                 break;
             case "POST":
-                response = createMonotask.apply(exchange);
+                response = createOrUpdateTask.apply(exchange);
+                break;
+            case "DELETE":
+                response = deleteTask.apply(exchange);
                 break;
             default:
                 exchange.sendResponseHeaders(405, 0);
@@ -51,23 +57,47 @@ public class MonotaskHandler implements HttpHandler {
 
     }
 
-    private Function<HttpExchange, String> createMonotask = exchange -> {
+    private Function<HttpExchange, String> deleteTask = exchange -> {
         String response = "";
+        URI url = exchange.getRequestURI();
+        Optional<Integer> id = QueryParamGetter.getTaskId(url);
+
+        try {
+            if (id.isPresent()) {
+                exchange.sendResponseHeaders(200, 0);
+                taskManager.removeTaskById(id.get());
+            } else {
+                exchange.sendResponseHeaders(400, 0);
+                response = "Параметр id не был найден";
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return response;
+    };
+
+    private Function<HttpExchange, String> createOrUpdateTask = exchange -> {
+        String response = "";
+        URI uri = exchange.getRequestURI();
+        Optional<Integer> id = QueryParamGetter.getTaskId(uri);
+
         try {
             InputStream inputStream = exchange.getRequestBody();
             String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
             JsonElement jsonElement = JsonParser.parseString(body);
-            if (jsonElement.isJsonObject()) {
-                Task task = gson.fromJson(jsonElement, MonoTask.class);
-                boolean addedResult = taskManager.addNewTask(task);
-                if (addedResult) {
-                    exchange.sendResponseHeaders(201, 0);
-                } else {
-                    exchange.sendResponseHeaders(417, 0);
 
+            if (jsonElement.isJsonObject()) {
+                exchange.sendResponseHeaders(200, 0);
+                Task task = gson.fromJson(jsonElement, MonoTask.class);
+                if (id.isPresent() && id.get() == task.getId()) {
+                    System.out.println("Update");
+                    taskManager.updateTask(task, id.get());
+                } else {
+                    System.out.println("Create");
+                    taskManager.addNewTask(task);
                 }
             } else {
-                exchange.sendResponseHeaders(204, 0);
+                exchange.sendResponseHeaders(400, 0);
                 response = "Ответ от сервера не соответствует ожидаемому.";
             }
 
@@ -77,7 +107,7 @@ public class MonotaskHandler implements HttpHandler {
         return response;
     };
 
-    private Function<HttpExchange, String> getMonotask = exchange -> {
+    private Function<HttpExchange, String> getTask = exchange -> {
         String response = "";
         URI url = exchange.getRequestURI();
         Optional<Integer> id = QueryParamGetter.getTaskId(url);
@@ -91,11 +121,11 @@ public class MonotaskHandler implements HttpHandler {
                     exchange.sendResponseHeaders(200, 0);
                     response = gson.toJson(task);
                 } else {
-                    exchange.sendResponseHeaders(404, 0);
+                    exchange.sendResponseHeaders(400, 0);
                     response = "Задача с таким иденификатором не была найдена";
                 }
             } else {
-                exchange.sendResponseHeaders(404, 0);
+                exchange.sendResponseHeaders(400, 0);
                 response = "Параметр id не был найден";
             }
         } catch (IOException e) {

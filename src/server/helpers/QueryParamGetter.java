@@ -12,7 +12,11 @@ public class QueryParamGetter {
      * Вернет индентификатор задачи, если в запросе был найден параметр id.
      */
     public static Optional<Integer> getTaskId(URI url) {
-        String[] params =  url.getQuery().split("&");
+        String query = url.getQuery();
+        if (query == null) {
+            return Optional.empty();
+        }
+        String[] params =  query.split("&");
 
         for (String param : params) {
             String name = param.split("=")[0];
