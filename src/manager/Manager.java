@@ -1,3 +1,5 @@
+package manager;
+
 import tasks.EpicTask;
 import tasks.MonoTask;
 import tasks.Subtask;
@@ -7,8 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Manager {
-    HashMap<Integer, EpicTask> epicTasks;
-    HashMap<Integer, MonoTask> monoTasks;
+    private HashMap<Integer, EpicTask> epicTasks;
+    private HashMap<Integer, MonoTask> monoTasks;
 
     public Manager() {
         this.epicTasks = new HashMap<>();

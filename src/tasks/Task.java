@@ -50,7 +50,8 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return ID == task.ID && Objects.equals(title, task.title) && Objects.equals(description, task.description) && status == task.status;
+        return ID == task.ID && Objects.equals(title, task.title) && Objects.equals(description, task.description)
+                && status == task.status;
     }
 
     @Override

@@ -16,13 +16,14 @@ public class EpicTask extends Task {
         return subtasks;
     }
 
-    private void updateStatus() {
+    @Override
+    public Status getStatus() {
         if (subtasks.isEmpty() || subtasks.size() == countTasksByStatus(Status.NEW)) {
-            status = Status.NEW;
+            return Status.NEW;
         } else if (subtasks.size() == countTasksByStatus(Status.DONE)) {
-            status = Status.DONE;
+            return Status.DONE;
         } else {
-            status = Status.IN_PROGRESS;
+            return Status.IN_PROGRESS;
         }
     }
 
@@ -51,7 +52,6 @@ public class EpicTask extends Task {
         int subtaskId = subtask.getID();
         if (subtasks.containsKey(subtaskId)) return false;
         subtasks.put(subtaskId, subtask);
-        updateStatus();
         return true;
     }
 
@@ -66,7 +66,6 @@ public class EpicTask extends Task {
         int subtaskId = subtask.getID();
         if (!subtasks.containsKey(subtaskId)) return false;
         subtasks.put(subtaskId, subtask);
-        updateStatus();
         return true;
     }
 
@@ -79,13 +78,11 @@ public class EpicTask extends Task {
     public boolean removeSubtask(int subtaskId) {
         if (!(subtasks.containsKey(subtaskId))) return false;
         subtasks.remove(subtaskId);
-        updateStatus();
         return true;
     }
 
     public void removeAllSubtasks() {
         subtasks.clear();
-        updateStatus();
     }
 
 }
