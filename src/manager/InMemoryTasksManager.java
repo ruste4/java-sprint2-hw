@@ -1,5 +1,6 @@
 package manager;
 
+import components.History;
 import tasks.EpicTask;
 import tasks.MonoTask;
 import tasks.Subtask;
@@ -8,24 +9,18 @@ import tasks.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Manager {
+public class InMemoryTasksManager implements TaskManager {
     private HashMap<Integer, EpicTask> epicTasks;
     private HashMap<Integer, MonoTask> monoTasks;
+    private History history;
 
-    public Manager() {
+    public InMemoryTasksManager() {
         this.epicTasks = new HashMap<>();
         this.monoTasks = new HashMap<>();
+        this.history = new History();
     }
 
-    /**
-     * Метод вернет true, если задача была успешно добавлена.
-     * Если в хранилище найдется задача с таким же индексом как у новой задачи,
-     * метод вернет false и добавления не будет.
-     *
-     * @param task
-     * @return boolean
-     */
-
+    @Override
     public boolean addNewTask(Task task) {
         if (task == null) return false;
         int taskId = task.getID();
@@ -50,13 +45,7 @@ public class Manager {
         return false;
     }
 
-    /**
-     * Метод вернет false: если искомый id не был найден,
-     * если тип переданной задачи не совпадает с найденной по id задачей
-     *
-     * @param task
-     * @return boolean
-     */
+    @Override
     public boolean updateTask(Task task, int id) {
         if (task == null) return false;
         Task foundTaskById = getTaskById(id);
@@ -77,6 +66,7 @@ public class Manager {
         return false;
     }
 
+    @Override
     public ArrayList<MonoTask> getAllMonotask() {
         ArrayList<MonoTask> result = new ArrayList<>();
 
@@ -84,6 +74,7 @@ public class Manager {
         return result;
     }
 
+    @Override
     public ArrayList<EpicTask> getAllEpics() {
         ArrayList<EpicTask> result = new ArrayList<>();
 
@@ -91,12 +82,7 @@ public class Manager {
         return result;
     }
 
-    /**
-     * Вернет nell, если задачи с переданным id нет в хранилище
-     *
-     * @param epicId
-     * @return
-     */
+    @Override
     public ArrayList<Subtask> getSubtasksDefinedEpic(int epicId) {
         ArrayList<Subtask> result = new ArrayList<>();
 
@@ -108,13 +94,7 @@ public class Manager {
         return result;
     }
 
-
-    /**
-     * Метод вернет null, если задачи с переданным id нет
-     *
-     * @param id
-     * @return Task
-     */
+    @Override
     public Task getTaskById(int id) {
         if (epicTasks.containsKey(id)) {
             return epicTasks.get(id);
@@ -131,12 +111,7 @@ public class Manager {
         return null;
     }
 
-    /**
-     * Метод вернет true, если задача была ранее добавлена
-     *
-     * @param id
-     * @return
-     */
+    @Override
     public boolean removeTaskById(int id) {
         Task task = getTaskById(id);
         if (task == null) return false;
@@ -156,9 +131,31 @@ public class Manager {
         return false;
     }
 
+    @Override
     public void removeAllTasks() {
         epicTasks.clear();
         monoTasks.clear();
+    }
+
+    @Override
+    public Subtask getSubtask(int id) {
+        Task subtask = getTaskById(id);
+        if (subtask == null || !(subtask instanceof Subtask)) return null;
+        history.addTaskIdToTheHistory(subtask);
+        return (Subtask) subtask;
+    }
+
+    @Override
+    public EpicTask getEpic(int id) {
+        Task epicTask = getTaskById(id);
+        if (epicTask == null || !(epicTask instanceof EpicTask)) return null;
+        history.addTaskIdToTheHistory(epicTask);
+        return (EpicTask) epicTask;
+    }
+
+    @Override
+    public ArrayList<Task> history() {
+        return history.getHistory();
     }
 
 }
