@@ -60,6 +60,7 @@ public interface TaskManager {
 
     /**
      * Вернет null если объект типа Subtask не был найден
+     *
      * @param id
      * @return
      */
@@ -67,6 +68,7 @@ public interface TaskManager {
 
     /**
      * Вернет null если объект типа EpicTask не был найден
+     *
      * @param id
      * @return
      */
