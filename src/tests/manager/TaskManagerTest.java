@@ -155,11 +155,13 @@ class TaskManagerTest {
         manager.getSubtask(subtaskID);
         manager.getEpic(epicTaskID);
         manager.getSubtask(subtaskID);
+        manager.getTaskById(epicTaskID);
 
         ArrayList<Task> tasksList = new ArrayList<>();
         tasksList.add(subtask);
         tasksList.add(epicTask);
         tasksList.add(subtask);
+        tasksList.add(epicTask);
 
         Assertions.assertEquals(manager.history(), tasksList);
     }

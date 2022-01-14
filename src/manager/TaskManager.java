@@ -1,79 +1,85 @@
 package manager;
 
 import tasks.EpicTask;
-import tasks.MonoTask;
 import tasks.Subtask;
 import tasks.Task;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskManager {
     /**
+     * Добавить новую задачу
+     *
+     * @param task
+     * @return boolean
      * Метод вернет true, если задача была успешно добавлена.
      * Если в хранилище найдется задача с таким же индексом как у новой задачи,
      * метод вернет false и добавления не будет.
+     */
+    boolean addNewTask(Task task);
+
+    /**
+     * Обновить задачу
      *
      * @param task
      * @return boolean
-     */
-    public boolean addNewTask(Task task);
-
-    /**
-     * Метод вернет false: если искомый id не был найден,
+     * Метод вернет false: если искомый id не был найден и
      * если тип переданной задачи не совпадает с найденной по id задачей
-     *
-     * @param task
-     * @return boolean
      */
-    public boolean updateTask(Task task, int id);
+    boolean updateTask(Task task, int id);
 
-    public ArrayList<MonoTask> getAllMonotask();
+    List getAllMonotask();
 
 
-    public ArrayList<EpicTask> getAllEpics();
+    List getAllEpics();
 
     /**
-     * Вернет null, если задачи с переданным id нет в хранилище
+     * Вернуть сабтаски определенной задачи
      *
      * @param epicId
-     * @return
+     * @return Вернет null, если задачи с переданным id нет в хранилище
      */
-    public ArrayList<Subtask> getSubtasksDefinedEpic(int epicId);
+    List getSubtasksDefinedEpic(int epicId);
 
     /**
-     * Метод вернет null, если задачи с переданным id нет
+     * Получить задачу любого типа (Subtask, EpicTask, Monotask) по id
      *
      * @param id
-     * @return Task
+     * @return Метод вернет null, если задача не найдена
      */
-    public Task getTaskById(int id);
+    Task getTaskById(int id);
 
     /**
-     * Метод вернет true, если задача была ранее добавлена
+     * Удалить задачу по id
      *
      * @param id
-     * @return
+     * @return Метод вернет false если задача с переданным id не была найдена
      */
-    public boolean removeTaskById(int id);
+    boolean removeTaskById(int id);
 
-    public void removeAllTasks();
+    void removeAllTasks();
 
     /**
-     * Вернет null если объект типа Subtask не был найден
+     * Получить Subtask по id
      *
      * @param id
-     * @return
+     * @return Вернет null если задача с переданным id не найден
      */
-    public Subtask getSubtask(int id);
+    Subtask getSubtask(int id);
 
     /**
-     * Вернет null если объект типа EpicTask не был найден
+     * Получить EpicTask по id
      *
      * @param id
-     * @return
+     * @return Вернет null если задача с переданным id не найден
      */
-    public EpicTask getEpic(int id);
+    EpicTask getEpic(int id);
 
-    public ArrayList<Task> history();
+    /**
+     * Хранилище истории вызовов задач
+     *
+     * @return Вернет список с ранее вызванными задачами
+     */
+    List history();
 
 }

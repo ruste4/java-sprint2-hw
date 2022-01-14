@@ -5,7 +5,7 @@ import tasks.Task;
 import java.util.ArrayList;
 
 public class History {
-    private int HISTORY_CAPACITY = 10;
+    final private int HISTORY_CAPACITY = 10;
     private ArrayList<Task> history;
 
     public History() {
