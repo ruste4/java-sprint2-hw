@@ -49,7 +49,7 @@ public class EpicTask extends Task {
      */
     public boolean addSubtask(Subtask subtask) {
         if (subtask == null) return false;
-        int subtaskId = subtask.getID();
+        int subtaskId = subtask.getId();
         if (subtasks.containsKey(subtaskId)) return false;
         subtasks.put(subtaskId, subtask);
         return true;
@@ -63,7 +63,7 @@ public class EpicTask extends Task {
      */
     public boolean updateSubtask(Subtask subtask) {
         if (subtask == null) return false;
-        int subtaskId = subtask.getID();
+        int subtaskId = subtask.getId();
         if (!subtasks.containsKey(subtaskId)) return false;
         subtasks.put(subtaskId, subtask);
         return true;

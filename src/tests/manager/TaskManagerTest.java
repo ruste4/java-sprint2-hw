@@ -21,7 +21,7 @@ class TaskManagerTest {
         EpicTask epicTask1 = taskGenerator.generateEpicTask();
         EpicTask epicTask2 = taskGenerator.generateEpicTask();
         EpicTask epicTask3 = taskGenerator.generateEpicTask();
-        Subtask subtask1 = taskGenerator.generateSubtask(epicTask1.getID());
+        Subtask subtask1 = taskGenerator.generateSubtask(epicTask1.getId());
 
         ArrayList<EpicTask> tasksList = new ArrayList<>();
         tasksList.add(epicTask1);
@@ -34,7 +34,7 @@ class TaskManagerTest {
         manager.addNewTask(epicTask3);
 
         Assertions.assertEquals(tasksList, manager.getAllEpics());
-        Assertions.assertFalse(manager.addNewTask(new EpicTask(epicTask1.getID(), "Epic", "Epic")));
+        Assertions.assertFalse(manager.addNewTask(new EpicTask(epicTask1.getId(), "Epic", "Epic")));
 
         // Проверяем добавление Subtask
         Assertions.assertTrue(manager.addNewTask(subtask1));
@@ -92,7 +92,7 @@ class TaskManagerTest {
     void getTaskById() {
         TaskManager manager = Managers.getDefault();
         MonoTask monoTask = taskGenerator.generateMonotask();
-        int monoTaskID = monoTask.getID();
+        int monoTaskID = monoTask.getId();
         manager.addNewTask(monoTask);
         Task methodResult = manager.getTaskById(monoTaskID);
         Assertions.assertEquals(monoTask, methodResult);
@@ -102,7 +102,7 @@ class TaskManagerTest {
     void removeTaskById() {
         TaskManager manager = Managers.getDefault();
         MonoTask monoTask = taskGenerator.generateMonotask();
-        int taskID = monoTask.getID();
+        int taskID = monoTask.getId();
         manager.addNewTask(monoTask);
         Assertions.assertTrue(manager.removeTaskById(taskID));
         Assertions.assertFalse(manager.removeTaskById(taskID));
@@ -113,7 +113,7 @@ class TaskManagerTest {
         TaskManager manager = Managers.getDefault();
         MonoTask monoTask = taskGenerator.generateMonotask();
         EpicTask epicTask = taskGenerator.generateEpicTask();
-        Subtask subtask = taskGenerator.generateSubtask(epicTask.getID());
+        Subtask subtask = taskGenerator.generateSubtask(epicTask.getId());
         manager.addNewTask(monoTask);
         manager.addNewTask(epicTask);
         manager.addNewTask(subtask);
@@ -126,8 +126,8 @@ class TaskManagerTest {
     void getSubtask() {
         TaskManager manager = Managers.getDefault();
         EpicTask epicTask = taskGenerator.generateEpicTask();
-        Subtask subtask = taskGenerator.generateSubtask(epicTask.getID());
-        int subtaskID = subtask.getID();
+        Subtask subtask = taskGenerator.generateSubtask(epicTask.getId());
+        int subtaskID = subtask.getId();
         manager.addNewTask(epicTask);
         manager.addNewTask(subtask);
         Assertions.assertEquals(manager.getSubtask(subtaskID), subtask);
@@ -137,7 +137,7 @@ class TaskManagerTest {
     void getEpic() {
         TaskManager manager = Managers.getDefault();
         EpicTask epicTask = taskGenerator.generateEpicTask();
-        int epicTaskID = epicTask.getID();
+        int epicTaskID = epicTask.getId();
         manager.addNewTask(epicTask);
         Assertions.assertEquals(manager.getEpic(epicTaskID), epicTask);
     }
@@ -146,9 +146,9 @@ class TaskManagerTest {
     void history() {
         TaskManager manager = Managers.getDefault();
         EpicTask epicTask = taskGenerator.generateEpicTask();
-        int epicTaskID = epicTask.getID();
+        int epicTaskID = epicTask.getId();
         Subtask subtask = taskGenerator.generateSubtask(epicTaskID);
-        int subtaskID = subtask.getID();
+        int subtaskID = subtask.getId();
         manager.addNewTask(epicTask);
         manager.addNewTask(subtask);
 

@@ -7,13 +7,13 @@ import java.util.Objects;
 public class Task {
     private String title;
     private String description;
-    private final int ID;
+    private final int id;
     protected Status status;
 
     public Task(int ID, String title, String description, Status status) {
         this.title = title;
         this.description = description;
-        this.ID = ID;
+        this.id = ID;
         this.status = status;
     }
 
@@ -25,8 +25,8 @@ public class Task {
         return description;
     }
 
-    public int getID() {
-        return ID;
+    public int getId() {
+        return id;
     }
 
     public Status getStatus() {
@@ -50,13 +50,13 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return ID == task.ID && Objects.equals(title, task.title) && Objects.equals(description, task.description)
+        return id == task.id && Objects.equals(title, task.title) && Objects.equals(description, task.description)
                 && status == task.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, description, ID, status);
+        return Objects.hash(title, description, id, status);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class Task {
         return "Task{" +
                 "title='" + title + '\'' +
                 ", description.length=" + description.length() +
-                ", id=" + ID +
+                ", id=" + id +
                 ", status=" + status +
                 '}';
     }

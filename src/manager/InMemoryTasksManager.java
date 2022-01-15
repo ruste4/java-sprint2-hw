@@ -25,7 +25,7 @@ public class InMemoryTasksManager implements TaskManager {
         if (task == null) {
             return false;
         }
-        int taskId = task.getID();
+        int taskId = task.getId();
 
         if (findTaskById(taskId) != null) {
             return false;

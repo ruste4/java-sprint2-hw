@@ -1,6 +1,7 @@
 package manager;
 
 import tasks.EpicTask;
+import tasks.MonoTask;
 import tasks.Subtask;
 import tasks.Task;
 
@@ -28,10 +29,10 @@ public interface TaskManager {
      */
     boolean updateTask(Task task, int id);
 
-    List getAllMonotask();
+    List<MonoTask> getAllMonotask();
 
 
-    List getAllEpics();
+    List<EpicTask> getAllEpics();
 
     /**
      * Вернуть сабтаски определенной задачи
@@ -39,7 +40,7 @@ public interface TaskManager {
      * @param epicId
      * @return Вернет null, если задачи с переданным id нет в хранилище
      */
-    List getSubtasksDefinedEpic(int epicId);
+    List<Subtask> getSubtasksDefinedEpic(int epicId);
 
     /**
      * Получить задачу любого типа (Subtask, EpicTask, Monotask) по id
