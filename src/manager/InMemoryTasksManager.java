@@ -1,6 +1,7 @@
 package manager;
 
-import components.History;
+import history.History;
+import history.HistoryManager;
 import tasks.EpicTask;
 import tasks.MonoTask;
 import tasks.Subtask;
@@ -8,10 +9,12 @@ import tasks.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class InMemoryTasksManager implements TaskManager {
+public class InMemoryTasksManager implements TaskManager, HistoryManager {
     private HashMap<Integer, EpicTask> epicTasks;
     private HashMap<Integer, MonoTask> monoTasks;
+
     private History history;
 
     public InMemoryTasksManager() {
@@ -127,7 +130,7 @@ public class InMemoryTasksManager implements TaskManager {
         if (task == null) {
             return null;
         }
-        history.addTaskIdToTheHistory(task);
+        addToHistory(task);
         return task;
     }
 
@@ -167,7 +170,7 @@ public class InMemoryTasksManager implements TaskManager {
         if (subtask == null || !(subtask instanceof Subtask)) {
             return null;
         }
-        history.addTaskIdToTheHistory(subtask);
+        addToHistory(subtask);
         return (Subtask) subtask;
     }
 
@@ -177,13 +180,22 @@ public class InMemoryTasksManager implements TaskManager {
         if (epicTask == null || !(epicTask instanceof EpicTask)) {
             return null;
         }
-        history.addTaskIdToTheHistory(epicTask);
+        addToHistory(epicTask);
         return (EpicTask) epicTask;
     }
 
     @Override
-    public ArrayList<Task> history() {
-        return history.getHistory();
+    public void addToHistory(Task task) {
+        history.linkLast(task);
     }
 
+    @Override
+    public void removeFromHistory(int id) {
+        history.removeNodeById(id);
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return history.getTasks();
+    }
 }

@@ -75,12 +75,4 @@ public interface TaskManager {
      * @return Вернет null если задача с переданным id не найден
      */
     EpicTask getEpic(int id);
-
-    /**
-     * Хранилище истории вызовов задач
-     *
-     * @return Вернет список с ранее вызванными задачами
-     */
-    List history();
-
 }

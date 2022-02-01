@@ -67,7 +67,7 @@ class TaskManagerTest {
     @org.junit.jupiter.api.Test
     void getSubtasksDefinedEpic() {
         TaskManager manager = Managers.getDefault();
-        int epicTaskID = 11;
+        int epicTaskID = 111;
 
         ArrayList<Subtask> subtaskList = new ArrayList<>();
         EpicTask epicTask = new EpicTask(epicTaskID, "EpicTask title", "EpicTask description");
@@ -140,29 +140,5 @@ class TaskManagerTest {
         int epicTaskID = epicTask.getId();
         manager.addNewTask(epicTask);
         Assertions.assertEquals(manager.getEpic(epicTaskID), epicTask);
-    }
-
-    @org.junit.jupiter.api.Test
-    void history() {
-        TaskManager manager = Managers.getDefault();
-        EpicTask epicTask = taskGenerator.generateEpicTask();
-        int epicTaskID = epicTask.getId();
-        Subtask subtask = taskGenerator.generateSubtask(epicTaskID);
-        int subtaskID = subtask.getId();
-        manager.addNewTask(epicTask);
-        manager.addNewTask(subtask);
-
-        manager.getSubtask(subtaskID);
-        manager.getEpic(epicTaskID);
-        manager.getSubtask(subtaskID);
-        manager.getTaskById(epicTaskID);
-
-        ArrayList<Task> tasksList = new ArrayList<>();
-        tasksList.add(subtask);
-        tasksList.add(epicTask);
-        tasksList.add(subtask);
-        tasksList.add(epicTask);
-
-        Assertions.assertEquals(manager.history(), tasksList);
     }
 }
