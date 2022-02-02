@@ -1,4 +1,4 @@
-package manager;
+package tasksManagers;
 
 import tasks.EpicTask;
 import tasks.MonoTask;
@@ -75,4 +75,6 @@ public interface TaskManager {
      * @return Вернет null если задача с переданным id не найден
      */
     EpicTask getEpic(int id);
+
+    List<Task> history();
 }

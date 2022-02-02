@@ -1,9 +1,9 @@
-package tests.manager;
+package tests.TaskManagers;
 
 import components.Status;
 import generators.TaskGenerator;
-import manager.Managers;
-import manager.TaskManager;
+import tasksManagers.Managers;
+import tasksManagers.TaskManager;
 import org.junit.jupiter.api.Assertions;
 import tasks.EpicTask;
 import tasks.MonoTask;
@@ -140,5 +140,62 @@ class TaskManagerTest {
         int epicTaskID = epicTask.getId();
         manager.addNewTask(epicTask);
         Assertions.assertEquals(manager.getEpic(epicTaskID), epicTask);
+    }
+
+    @org.junit.jupiter.api.Test
+    void history() {
+        TaskManager manager = Managers.getDefault();
+        ArrayList<Task> controlArr = new ArrayList<>();
+
+        Task epic1 = taskGenerator.generateEpicTask();
+        Task epic2 = taskGenerator.generateEpicTask();
+        Task subtask11 = taskGenerator.generateSubtask(epic1.getId());
+        Task subtask12 = taskGenerator.generateSubtask(epic1.getId());
+        Task subtask13 = taskGenerator.generateSubtask(epic1.getId());
+        Task monotask1 = taskGenerator.generateMonotask();
+
+        manager.addNewTask(epic1);
+        manager.addNewTask(epic2);
+        manager.addNewTask(subtask11);
+        manager.addNewTask(subtask12);
+        manager.addNewTask(subtask13);
+        manager.addNewTask(monotask1);
+
+        manager.getTaskById(epic1.getId());
+        controlArr.add(epic1);
+
+        manager.getSubtask(subtask11.getId());
+        controlArr.add(subtask11);
+
+        manager.getEpic(epic2.getId());
+        controlArr.add(epic2);
+
+        manager.getTaskById(subtask13.getId());
+        controlArr.add(subtask13);
+
+        manager.getTaskById(monotask1.getId());
+        controlArr.add(monotask1);
+
+        // Повторно вызваем задачу
+        manager.getEpic(epic1.getId());
+        controlArr.remove(epic1);
+        controlArr.add(epic1);
+
+        Assertions.assertEquals(controlArr, manager.history());
+
+        //Проверка удаления задачи
+        manager.removeTaskById(epic2.getId());
+        controlArr.remove(epic2);
+
+        Assertions.assertEquals(controlArr, manager.history());
+
+        // Проверка на удаление эпика вместе с его подзадачами
+        manager.removeTaskById(epic1.getId());
+        controlArr.remove(epic1);
+        controlArr.remove(subtask11);
+        controlArr.remove(subtask12);
+        controlArr.remove(subtask13);
+
+        Assertions.assertEquals(controlArr, manager.history());
     }
 }

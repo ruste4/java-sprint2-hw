@@ -1,7 +1,7 @@
-package manager;
+package tasksManagers;
 
-import history.History;
-import history.HistoryManager;
+import historyManagers.HistoryManager;
+import historyManagers.InMemoryHistoryManager;
 import tasks.EpicTask;
 import tasks.MonoTask;
 import tasks.Subtask;
@@ -11,16 +11,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class InMemoryTasksManager implements TaskManager, HistoryManager {
+public class InMemoryTasksManager implements TaskManager {
     private HashMap<Integer, EpicTask> epicTasks;
     private HashMap<Integer, MonoTask> monoTasks;
-
-    private History history;
+    private HistoryManager historyManager;
 
     public InMemoryTasksManager() {
         this.epicTasks = new HashMap<>();
         this.monoTasks = new HashMap<>();
-        this.history = new History();
+        this.historyManager = new InMemoryHistoryManager();
     }
 
     @Override
@@ -130,7 +129,7 @@ public class InMemoryTasksManager implements TaskManager, HistoryManager {
         if (task == null) {
             return null;
         }
-        addToHistory(task);
+        historyManager.add(task);
         return task;
     }
 
@@ -141,9 +140,15 @@ public class InMemoryTasksManager implements TaskManager, HistoryManager {
             return false;
         }
         if (task instanceof EpicTask) {
+            HashMap<Integer, Subtask> subtasks = ((EpicTask) task).getSubtasks();
+            for (int subtaskId : subtasks.keySet()) {
+                historyManager.remove(subtaskId);
+            }
+            historyManager.remove(id);
             epicTasks.remove(id);
             return true;
         } else if (task instanceof MonoTask) {
+            historyManager.remove(id);
             monoTasks.remove(id);
             return true;
         } else if (task instanceof Subtask) {
@@ -152,6 +157,7 @@ public class InMemoryTasksManager implements TaskManager, HistoryManager {
             if (epicTask == null) {
                 return false;
             }
+            historyManager.remove(id);
             epicTask.removeSubtask(id);
             return true;
         }
@@ -162,6 +168,7 @@ public class InMemoryTasksManager implements TaskManager, HistoryManager {
     public void removeAllTasks() {
         epicTasks.clear();
         monoTasks.clear();
+        historyManager.clearHistory();
     }
 
     @Override
@@ -170,7 +177,7 @@ public class InMemoryTasksManager implements TaskManager, HistoryManager {
         if (subtask == null || !(subtask instanceof Subtask)) {
             return null;
         }
-        addToHistory(subtask);
+        historyManager.add(subtask);
         return (Subtask) subtask;
     }
 
@@ -180,22 +187,14 @@ public class InMemoryTasksManager implements TaskManager, HistoryManager {
         if (epicTask == null || !(epicTask instanceof EpicTask)) {
             return null;
         }
-        addToHistory(epicTask);
+        historyManager.add(epicTask);
         return (EpicTask) epicTask;
     }
 
     @Override
-    public void addToHistory(Task task) {
-        history.linkLast(task);
+    public List<Task> history() {
+        return historyManager.getHistory();
     }
 
-    @Override
-    public void removeFromHistory(int id) {
-        history.removeNodeById(id);
-    }
-
-    @Override
-    public List<Task> getHistory() {
-        return history.getTasks();
-    }
+    ;
 }
