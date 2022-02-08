@@ -1,7 +1,7 @@
-package tasksManagers;
+package tasks.managers;
 
-import historyManagers.HistoryManager;
-import historyManagers.InMemoryHistoryManager;
+import history.managers.HistoryManager;
+import history.managers.InMemoryHistoryManager;
 import tasks.EpicTask;
 import tasks.MonoTask;
 import tasks.Subtask;

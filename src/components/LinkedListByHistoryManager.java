@@ -29,8 +29,8 @@ public class LinkedListByHistoryManager<T extends Task> {
             head = newNode;
         }
         if (tail != null) {
-            tail.next = newNode;
-            newNode.prev = tail;
+            tail.setNext(newNode);
+            newNode.setPrev(tail);
         }
         tail = newNode;
         size++;
@@ -49,25 +49,25 @@ public class LinkedListByHistoryManager<T extends Task> {
             return null;
         }
 
-        Node<T> prevNode = node.prev;
-        Node<T> nextNode = node.next;
+        Node<T> prevNode = node.getPrev();
+        Node<T> nextNode = node.getNext();
 
         if (prevNode != null && nextNode != null) {
-            prevNode.next = nextNode;
-            nextNode.prev = prevNode;
+            prevNode.setNext(nextNode);
+            nextNode.setPrev(prevNode);
         } else if (prevNode == null && nextNode != null) {
-            nextNode.prev = null;
+            nextNode.setPrev(null);
             head = nextNode;
         } else if (nextNode == null && prevNode != null) {
-            prevNode.next = null;
+            prevNode.setNext(null);
             tail = prevNode;
         }
 
-        node.prev = null;
-        node.next = null;
+        node.setPrev(null);
+        node.setNext(null);
         size--;
 
-        return node.data;
+        return node.getData();
     }
 
     public ArrayList<T> getTasks() {
@@ -75,8 +75,8 @@ public class LinkedListByHistoryManager<T extends Task> {
         Node<T> node = head;
 
         while (node != null) {
-            result.add(node.data);
-            node = node.next;
+            result.add(node.getData());
+            node = node.getNext();
         }
 
         return result;

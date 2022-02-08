@@ -1,4 +1,4 @@
-package tasksManagers;
+package tasks.managers;
 
 import tasks.EpicTask;
 import tasks.MonoTask;

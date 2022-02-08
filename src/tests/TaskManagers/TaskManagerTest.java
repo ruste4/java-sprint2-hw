@@ -2,8 +2,8 @@ package tests.TaskManagers;
 
 import components.Status;
 import generators.TaskGenerator;
-import tasksManagers.Managers;
-import tasksManagers.TaskManager;
+import tasks.managers.Managers;
+import tasks.managers.TaskManager;
 import org.junit.jupiter.api.Assertions;
 import tasks.EpicTask;
 import tasks.MonoTask;

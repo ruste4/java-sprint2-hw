@@ -18,7 +18,7 @@ class LinkedListByHistoryManagerTest {
 
     @Test
     void linkLast() {
-        LinkedListByHistoryManager linkedList = new LinkedListByHistoryManager<>();
+        LinkedListByHistoryManager<Task> linkedList = new LinkedListByHistoryManager<>();
         ArrayList<Task> controlArr = new ArrayList<>();
 
         linkedList.linkLast(monotask1);
@@ -35,7 +35,7 @@ class LinkedListByHistoryManagerTest {
 
     @Test
     void removeNode() {
-        LinkedListByHistoryManager linkedList = new LinkedListByHistoryManager<>();
+        LinkedListByHistoryManager<Task> linkedList = new LinkedListByHistoryManager<>();
         ArrayList<Task> controlArr = new ArrayList<>();
 
         Node<Task> node1 = linkedList.linkLast(monotask1);

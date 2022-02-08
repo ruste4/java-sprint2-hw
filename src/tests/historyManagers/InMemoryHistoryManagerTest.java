@@ -1,8 +1,8 @@
 package tests.historyManagers;
 
 import generators.TaskGenerator;
-import historyManagers.HistoryManager;
-import historyManagers.InMemoryHistoryManager;
+import history.managers.HistoryManager;
+import history.managers.InMemoryHistoryManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import tasks.Task;
