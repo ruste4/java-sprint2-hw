@@ -1,11 +1,8 @@
-package tasks.managers;
+package tasksmanagers;
 
-import history.managers.HistoryManager;
-import history.managers.InMemoryHistoryManager;
-import tasks.EpicTask;
-import tasks.MonoTask;
-import tasks.Subtask;
-import tasks.Task;
+import historymanagers.HistoryManager;
+import historymanagers.InMemoryHistoryManager;
+import tasks.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,7 +30,7 @@ public class InMemoryTasksManager implements TaskManager {
             return false;
         }
 
-        if (task instanceof Subtask) {
+        if (task.getType() == TaskTypes.SUBTASK) {
             int epicID = ((Subtask) task).getEpicID();
 
             EpicTask epicTask = (EpicTask) findTaskById(epicID);
@@ -42,10 +39,10 @@ public class InMemoryTasksManager implements TaskManager {
             }
             boolean addSubtaskResult = epicTask.addSubtask((Subtask) task);
             return addSubtaskResult;
-        } else if (task instanceof EpicTask) {
+        } else if (task.getType() == TaskTypes.EPIC) {
             epicTasks.put(taskId, (EpicTask) task);
             return true;
-        } else if (task instanceof MonoTask) {
+        } else if (task.getType() == TaskTypes.MONOTASK) {
             monoTasks.put(taskId, (MonoTask) task);
             return true;
         }
@@ -62,16 +59,16 @@ public class InMemoryTasksManager implements TaskManager {
         if (foundTaskById == null || foundTaskById.getClass() != task.getClass()) {
             return false;
         }
-        if (task instanceof Subtask) {
+        if (task.getType() == TaskTypes.SUBTASK) {
             int epicId = ((Subtask) task).getEpicID();
 
             EpicTask epic = (EpicTask) findTaskById(epicId);
             epic.updateSubtask((Subtask) task);
             return true;
-        } else if (task instanceof MonoTask) {
+        } else if (task.getType() == TaskTypes.MONOTASK) {
             monoTasks.put(id, (MonoTask) task);
             return true;
-        } else if (task instanceof EpicTask) {
+        } else if (task.getType() == TaskTypes.EPIC) {
             epicTasks.put(id, (EpicTask) task);
             return true;
         }
@@ -99,7 +96,7 @@ public class InMemoryTasksManager implements TaskManager {
         ArrayList<Subtask> result = new ArrayList<>();
 
         Task foundTask = findTaskById(epicId);
-        if (foundTask == null || !(foundTask instanceof EpicTask)) {
+        if (foundTask == null || !(foundTask.getType() == TaskTypes.EPIC)) {
             return null;
         }
         HashMap<Integer, Subtask> epicSubtasks = ((EpicTask) foundTask).getSubtasks();
@@ -139,7 +136,7 @@ public class InMemoryTasksManager implements TaskManager {
         if (task == null) {
             return false;
         }
-        if (task instanceof EpicTask) {
+        if (task.getType() == TaskTypes.EPIC) {
             HashMap<Integer, Subtask> subtasks = ((EpicTask) task).getSubtasks();
             for (int subtaskId : subtasks.keySet()) {
                 historyManager.remove(subtaskId);
@@ -147,11 +144,11 @@ public class InMemoryTasksManager implements TaskManager {
             historyManager.remove(id);
             epicTasks.remove(id);
             return true;
-        } else if (task instanceof MonoTask) {
+        } else if (task.getType() == TaskTypes.MONOTASK) {
             historyManager.remove(id);
             monoTasks.remove(id);
             return true;
-        } else if (task instanceof Subtask) {
+        } else if (task.getType() == TaskTypes.SUBTASK) {
             int epicId = ((Subtask) task).getEpicID();
             EpicTask epicTask = (EpicTask) findTaskById(epicId);
             if (epicTask == null) {
@@ -174,7 +171,7 @@ public class InMemoryTasksManager implements TaskManager {
     @Override
     public Subtask getSubtask(int id) {
         Task subtask = findTaskById(id);
-        if (subtask == null || !(subtask instanceof Subtask)) {
+        if (subtask == null || !(subtask.getType() == TaskTypes.SUBTASK)) {
             return null;
         }
         historyManager.add(subtask);
@@ -184,7 +181,7 @@ public class InMemoryTasksManager implements TaskManager {
     @Override
     public EpicTask getEpic(int id) {
         Task epicTask = findTaskById(id);
-        if (epicTask == null || !(epicTask instanceof EpicTask)) {
+        if (epicTask == null || !(epicTask.getType() == TaskTypes.EPIC)) {
             return null;
         }
         historyManager.add(epicTask);

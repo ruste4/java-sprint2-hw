@@ -1,4 +1,4 @@
-package history.managers;
+package historymanagers;
 
 import components.LinkedListByHistoryManager;
 import components.Node;

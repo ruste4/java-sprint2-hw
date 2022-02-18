@@ -9,12 +9,14 @@ public class Task {
     private String description;
     private final int id;
     protected Status status;
+    private TaskTypes type;
 
-    public Task(int ID, String title, String description, Status status) {
+    public Task(int ID, TaskTypes type, String title, String description, Status status) {
         this.title = title;
         this.description = description;
         this.id = ID;
         this.status = status;
+        this.type = type;
     }
 
     public String getTitle() {
@@ -43,6 +45,14 @@ public class Task {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public TaskTypes getType() {
+        return type;
+    }
+
+    public void setType(TaskTypes type) {
+        this.type = type;
     }
 
     @Override

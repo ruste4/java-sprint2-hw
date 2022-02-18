@@ -1,4 +1,4 @@
-package history.managers;
+package historymanagers;
 
 import tasks.Task;
 
