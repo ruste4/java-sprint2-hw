@@ -1,4 +1,4 @@
-package tests.TaskManagers;
+package tests.taskManagers;
 
 import components.Status;
 import generators.TaskGenerator;
@@ -12,7 +12,7 @@ import tasks.Task;
 
 import java.util.ArrayList;
 
-class TaskManagerTest {
+class InMemoryTasksManager {
     TaskGenerator taskGenerator = new TaskGenerator();
 
     @org.junit.jupiter.api.Test

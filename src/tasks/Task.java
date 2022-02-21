@@ -71,11 +71,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
-                "title='" + title + '\'' +
-                ", description.length=" + description.length() +
-                ", id=" + id +
-                ", status=" + status +
-                '}';
+        String[] statusArray = {String.valueOf(id), String.valueOf(type), title, String.valueOf(getStatus()), description};
+        return String.join(",", statusArray);
     }
 }

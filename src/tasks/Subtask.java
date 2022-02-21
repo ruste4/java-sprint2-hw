@@ -17,4 +17,9 @@ public class Subtask extends Task {
     public void setEpicID(int epicID) {
         this.epicID = epicID;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "," + String.valueOf(epicID);
+    }
 }
