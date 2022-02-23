@@ -11,12 +11,16 @@ import java.util.List;
 public class InMemoryTasksManager implements TaskManager {
     private HashMap<Integer, EpicTask> epicTasks;
     private HashMap<Integer, MonoTask> monoTasks;
-    protected HistoryManager historyManager;
+    private HistoryManager historyManager;
 
     public InMemoryTasksManager() {
         this.epicTasks = new HashMap<>();
         this.monoTasks = new HashMap<>();
         this.historyManager = new InMemoryHistoryManager();
+    }
+
+    protected void setHistoryManager(HistoryManager historyManager) {
+        this.historyManager = historyManager;
     }
 
     @Override
@@ -192,6 +196,4 @@ public class InMemoryTasksManager implements TaskManager {
     public List<Task> history() {
         return historyManager.getHistory();
     }
-
-    ;
 }

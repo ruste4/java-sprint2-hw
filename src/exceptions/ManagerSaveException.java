@@ -1,9 +1,10 @@
 package exceptions;
 
-import java.io.IOError;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 
-public class ManagerSaveException extends IOError {
-    public ManagerSaveException(Throwable cause) {
+public class ManagerSaveException extends UncheckedIOException {
+    public ManagerSaveException(IOException cause) {
         super(cause);
     }
 }
