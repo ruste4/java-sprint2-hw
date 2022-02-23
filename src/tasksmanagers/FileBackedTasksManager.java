@@ -113,6 +113,8 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
             List<String> lines = Files.readAllLines(file.toPath());
             HashMap<Integer, Task> loadedTasks = new HashMap<>();
             HistoryManager historyManager = new InMemoryHistoryManager();
+            String historyLine = lines.get(lines.size() - 1);
+            String[] historyIds = historyLine.split(",");
 
             for (int i = 1; i < lines.size() - 1; i++) {
                 if (lines.get(i).isBlank()) {
@@ -143,8 +145,7 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
                 }
             }
 
-            String historyLine = lines.get(lines.size() - 1);
-            String[] historyIds = historyLine.split(",");
+
             for (String taskId : historyIds) {
                 historyManager.add(loadedTasks.get(Integer.parseInt(taskId)));
             }
