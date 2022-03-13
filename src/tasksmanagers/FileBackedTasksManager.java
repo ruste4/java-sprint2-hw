@@ -10,12 +10,11 @@ import tasks.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class FileBackedTasksManager extends InMemoryTasksManager {
+public class FileBackedTasksManager extends BaseTaskManager {
     private static final String DEFAULT_SAVE_FILE_NAME = "src/tasksaves/taskSaveDefault.csv";
     private final File saveFile;
 
@@ -144,7 +143,9 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
             }
 
             for (String taskId : historyIds) {
-                historyManager.add(loadedTasks.get(Integer.parseInt(taskId)));
+                if (!taskId.isBlank()) {
+                    historyManager.add(loadedTasks.get(Integer.parseInt(taskId)));
+                }
             }
             fileBackedTasksManager.setHistoryManager(historyManager);
         } catch (IOException e) {

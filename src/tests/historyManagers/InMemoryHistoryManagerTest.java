@@ -84,4 +84,25 @@ class InMemoryHistoryManagerTest {
 
         Assertions.assertEquals(controlArr, historyManager.getHistory());
     }
+
+    @Test
+    public void clearHistoryTest() {
+        HistoryManager historyManager = new InMemoryHistoryManager();
+
+        historyManager.add(monotask);
+        historyManager.add(subtask);
+        historyManager.add(subtask1);
+        historyManager.add(epic);
+        historyManager.add(epic1);
+
+        historyManager.clearHistory();
+
+        Assertions.assertTrue(historyManager.getHistory().isEmpty());
+    }
+
+    @Test
+    public void shouldBeEmptyListByEmptyHistory() {
+        HistoryManager historyManager = new InMemoryHistoryManager();
+        Assertions.assertTrue(historyManager.getHistory().isEmpty());
+    }
 }

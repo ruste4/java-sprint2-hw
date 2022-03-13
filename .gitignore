@@ -42,3 +42,5 @@ hs_err_pid*
 /.idea/
 /src/tasksaves/
 /src/tests/taskManagers/taskSaveTest.csv
+/src/tests/taskManagers/taskSaveTestByEmptyTaskList.csv
+/src/tests/taskManagers/taskSaveTestByEpicWithoutSubtasks.csv
