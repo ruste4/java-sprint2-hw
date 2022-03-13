@@ -4,24 +4,26 @@ import historymanagers.HistoryManager;
 import historymanagers.InMemoryHistoryManager;
 import tasks.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class InMemoryTasksManager implements TaskManager {
-    private HashMap<Integer, EpicTask> epicTasks;
-    private HashMap<Integer, MonoTask> monoTasks;
+    private TreeMap<Integer, EpicTask> epicTasks;
+    private TreeMap<Integer, MonoTask> monoTasks;
     private HistoryManager historyManager;
 
     public InMemoryTasksManager() {
-        this.epicTasks = new HashMap<>();
-        this.monoTasks = new HashMap<>();
+        this.epicTasks = new TreeMap<>();
+        this.monoTasks = new TreeMap<>();
         this.historyManager = new InMemoryHistoryManager();
     }
 
     protected void setHistoryManager(HistoryManager historyManager) {
         this.historyManager = historyManager;
     }
+
+//    public TreeSet getPrioritizedTasks() {
+//
+//    }
 
     @Override
     public boolean addNewTask(Task task) {

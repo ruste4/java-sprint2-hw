@@ -22,6 +22,14 @@ public class TaskGenerator {
         return new Subtask(id, title, description, epicTaskID, Status.NEW);
     }
 
+    public Subtask generateSubtask(int epicTaskID, Status status) {
+        int id = IDGenerator.getID();
+        String title = "Title for Subtask with ID: " + id;
+        String description = "Description for Subtask with ID: " + id;
+
+        return new Subtask(id, title, description, epicTaskID, status);
+    }
+
     public MonoTask generateMonotask() {
         int id = IDGenerator.getID();
         String title = "Title for Monotask with ID: " + id;

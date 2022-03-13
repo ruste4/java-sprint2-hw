@@ -12,7 +12,7 @@ public class FileWriter {
     public static void writeTasksToCSV(List<Task> tasks, File saveFile, List<Task> history) throws IOException {
         try (Writer fileWriter = new java.io.FileWriter(saveFile, UTF_8);
              BufferedWriter bfWriter = new BufferedWriter(fileWriter)) {
-            bfWriter.write("id,type,name,status,description,epic");
+            bfWriter.write("id,type,name,status,description,duration,startTime,epic");
             bfWriter.newLine();
             for (Task task : tasks) {
                 bfWriter.write(task.toString());

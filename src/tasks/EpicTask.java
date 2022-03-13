@@ -2,6 +2,8 @@ package tasks;
 
 import components.Status;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class EpicTask extends Task {
@@ -25,6 +27,33 @@ public class EpicTask extends Task {
         } else {
             return Status.IN_PROGRESS;
         }
+    }
+
+    @Override
+    public Duration getDuration() {
+        Duration result = Duration.ZERO;
+        for (Subtask subtask : subtasks.values()) {
+            result = result.plus(subtask.getDuration());
+        }
+
+        return result;
+    }
+
+    @Override
+    public LocalDateTime getStartTime() {
+        LocalDateTime startFirstSubtask = LocalDateTime.MAX;
+        for (Subtask subtask : subtasks.values()) {
+            if (subtask.getStartTime() != null &&
+                    startFirstSubtask.isAfter(subtask.getStartTime())) {
+                startFirstSubtask = subtask.getStartTime();
+            }
+        }
+        if (startFirstSubtask.isEqual(LocalDateTime.MAX)) {
+            return null;
+        } else {
+            return startFirstSubtask;
+        }
+
     }
 
     private int countTasksByStatus(Status status) {

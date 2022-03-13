@@ -10,6 +10,7 @@ import tasks.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -125,26 +126,22 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
                 String title = column[2];
                 Status status = Status.valueOf(column[3]);
                 String description = column[4];
-
+                String duration = column[5];
+                String startTime = column[6];
+                Task task;
                 if (column[1].equals(TaskTypes.MONOTASK.name())) {
-                    Task task = new MonoTask(id, title, description, status);
-
-                    fileBackedTasksManager.loadNewTask(task);
-                    loadedTasks.put(task.getId(), task);
+                    task = new MonoTask(id, title, description, status);
                 } else if (column[1].equals(TaskTypes.EPIC.name())) {
-                    Task task = new EpicTask(id, title, description);
-
-                    fileBackedTasksManager.loadNewTask(task);
-                    loadedTasks.put(task.getId(), task);
-                } else if (column[1].equals(TaskTypes.SUBTASK.name())) {
-                    int epicId = Integer.parseInt(column[5]);
-                    Task task = new Subtask(id, title, description, epicId, status);
-
-                    fileBackedTasksManager.loadNewTask(task);
-                    loadedTasks.put(task.getId(), task);
+                    task = new EpicTask(id, title, description);
+                } else {
+                    int epicId = Integer.parseInt(column[7]);
+                    task = new Subtask(id, title, description, epicId, status);
                 }
+                task.setDurationOfMinuts(Long.parseLong(duration));
+                task.setStartTime(startTime);
+                fileBackedTasksManager.loadNewTask(task);
+                loadedTasks.put(task.getId(), task);
             }
-
 
             for (String taskId : historyIds) {
                 historyManager.add(loadedTasks.get(Integer.parseInt(taskId)));
