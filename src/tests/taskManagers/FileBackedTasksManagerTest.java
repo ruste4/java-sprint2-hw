@@ -7,13 +7,11 @@ import tasks.EpicTask;
 import tasks.MonoTask;
 import tasks.Subtask;
 import tasks.Task;
-import tasksmanagers.BaseTaskManager;
 import tasksmanagers.FileBackedTasksManager;
-import tasksmanagers.TaskManager;
 
 import java.io.File;
 
-class FileBackedTasksManagerTest  extends TaskManagerTest {
+class FileBackedTasksManagerTest  extends BaseTaskManagerTest {
     @Test
     public void saveAndLoadFromFile() {
         String testFilePath = "src/tests/taskManagers/taskSaveTest.csv";

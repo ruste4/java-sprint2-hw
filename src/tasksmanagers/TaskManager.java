@@ -6,6 +6,8 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public interface TaskManager {
     /**

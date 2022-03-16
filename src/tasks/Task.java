@@ -4,9 +4,10 @@ import components.Status;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.Objects;
 
-public class Task  implements Comparable{
+public class Task implements Comparable<Task>{
     private String title;
     private String description;
     private final int id;
@@ -102,8 +103,26 @@ public class Task  implements Comparable{
         return String.join(",", statusArray);
     }
 
+
     @Override
-    public int compareTo(Object o) {
-        return this.duration.compareTo(getDuration());
+    public int compareTo(Task o) {
+        if (this.getId() == o.getId()) {
+            return 0;
+        }
+        if (this.getStartTime() == null && o.getStartTime() == null) {
+            return 1;
+        }
+        if (this.getStartTime() != null && o.getStartTime() == null) {
+            return -1;
+        }
+        if (this.getStartTime() == null && o.getStartTime() != null) {
+            return 1;
+        }
+
+        if (this.getStartTime().isEqual(o.getStartTime())) {
+            return 1;
+        }
+
+        return this.getStartTime().compareTo(o.getStartTime());
     }
 }

@@ -7,11 +7,11 @@ import tasks.*;
 import java.util.*;
 
 public class BaseTaskManager implements TaskManager {
-    private TreeMap<Integer, Task> tasks;
+    private TreeSet<Task> tasks;
     private HistoryManager historyManager;
 
     public BaseTaskManager() {
-        this.tasks = new TreeMap<>();
+        this.tasks = new TreeSet<>();
         this.historyManager = new InMemoryHistoryManager();
     }
 
@@ -19,9 +19,9 @@ public class BaseTaskManager implements TaskManager {
         this.historyManager = historyManager;
     }
 
-//    public TreeSet getPrioritizedTasks() {
-//        return tasks.t();
-//    }
+    public TreeSet<Task> getPrioritizedTasks() {
+        return tasks;
+    }
 
     @Override
     public boolean addNewTask(Task task) {
@@ -41,11 +41,12 @@ public class BaseTaskManager implements TaskManager {
             if (epicTask == null) {
                 return false;
             }
-            boolean addSubtaskResult = epicTask.addSubtask((Subtask) task);
-            return addSubtaskResult;
+            tasks.remove(epicTask);
+            boolean result = epicTask.addSubtask((Subtask) task);
+            tasks.add(epicTask);
+            return result;
         } else {
-            tasks.put(taskId, task);
-            return true;
+            return tasks.add(task);
         }
     }
 
@@ -58,6 +59,7 @@ public class BaseTaskManager implements TaskManager {
         if (foundTaskById == null || foundTaskById.getClass() != task.getClass()) {
             return false;
         }
+        tasks.remove(foundTaskById);
         if (task.getType() == TaskTypes.SUBTASK) {
             int epicId = ((Subtask) task).getEpicID();
 
@@ -65,7 +67,7 @@ public class BaseTaskManager implements TaskManager {
             epic.updateSubtask((Subtask) task);
             return true;
         } else {
-            tasks.put(id, task);
+            tasks.add(task);
             return true;
         }
     }
@@ -73,7 +75,7 @@ public class BaseTaskManager implements TaskManager {
     @Override
     public ArrayList<MonoTask> getAllMonotask() {
         ArrayList<MonoTask> result = new ArrayList<>();
-        for (Task task : tasks.values()) {
+        for (Task task : tasks) {
             if (task.getType() == TaskTypes.MONOTASK) {
                 result.add((MonoTask) task);
             }
@@ -84,7 +86,7 @@ public class BaseTaskManager implements TaskManager {
     @Override
     public ArrayList<EpicTask> getAllEpics() {
         ArrayList<EpicTask> result = new ArrayList<>();
-        for (Task task : tasks.values()) {
+        for (Task task : tasks) {
             if (task.getType() == TaskTypes.EPIC) {
                 result.add((EpicTask) task);
             }
@@ -106,17 +108,17 @@ public class BaseTaskManager implements TaskManager {
     }
 
     private Task findTaskById(int id) {
-        if (tasks.containsKey(id)) {
-            return tasks.get(id);
-        }
-
-        for (Task task : tasks.values()) {
+        for (Task task : tasks) {
+            if (task.getId() == id) {
+                return task;
+            }
             if (task.getType() == TaskTypes.EPIC) {
                 Subtask requiredSubtask = ((EpicTask) task).searchSubtaskById(id);
                 if (requiredSubtask != null) {
                     return requiredSubtask;
                 }
             }
+
         }
         return null;
     }
@@ -143,11 +145,11 @@ public class BaseTaskManager implements TaskManager {
                 historyManager.remove(subtaskId);
             }
             historyManager.remove(id);
-            tasks.remove(id);
+            tasks.remove(task);
             return true;
         } else if (task.getType() == TaskTypes.MONOTASK) {
             historyManager.remove(id);
-            tasks.remove(id);
+            tasks.remove(task);
             return true;
         } else if (task.getType() == TaskTypes.SUBTASK) {
             int epicId = ((Subtask) task).getEpicID();

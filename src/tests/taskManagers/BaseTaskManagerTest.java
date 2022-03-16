@@ -13,10 +13,12 @@ import tasksmanagers.BaseTaskManager;
 import tasksmanagers.TaskManager;
 
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
-public class TaskManagerTest {
+public class BaseTaskManagerTest {
     private static TaskGenerator tg;
-    private static TaskManager tm;
+    private static BaseTaskManager tm;
 
     @BeforeEach
     public void beforeEach() {
@@ -44,8 +46,8 @@ public class TaskManagerTest {
         List<Task> epicChecklist = List.of(epic, epic2);
         List<Task> monotaskCheckList = List.of(monoTask, monoTask2);
 
-        Assertions.assertTrue(epicChecklist.equals(tm.getAllEpics()));
-        Assertions.assertTrue(monotaskCheckList.equals(tm.getAllMonotask()));
+        Assertions.assertTrue(epicChecklist.containsAll(tm.getAllEpics()));
+        Assertions.assertTrue(monotaskCheckList.containsAll(tm.getAllMonotask()));
     }
 
     @Test
@@ -215,5 +217,43 @@ public class TaskManagerTest {
         List<Task> checklistAfterChangeHistory = List.of(subtask2, epic3, monoTask1);
         tm.getTaskById(monoTask1.getId());
         Assertions.assertEquals(checklistAfterChangeHistory, tm.history());
+    }
+
+    @Test
+    public void getPrioritizedTasks() {
+        MonoTask mono1 = new MonoTask(1,"mono1", "", Status.NEW);
+        mono1.setStartTime("2022-04-19T10:15:30");
+
+        MonoTask mono2 = new MonoTask(2,"mono2", "", Status.NEW);
+
+        MonoTask mono3 = new MonoTask(3,"mono3", "", Status.NEW);
+        mono3.setStartTime("2022-04-15T10:15:30");
+
+        EpicTask epic4 = new EpicTask(4, "epic4", "");
+
+        EpicTask epic5 = new EpicTask(5, "epic5", "");
+
+        EpicTask epic6 = new EpicTask(6, "epic6", "");
+
+        Subtask sub7 = new Subtask(7, "sub7", "", 4, Status.NEW);
+        sub7.setStartTime("2022-04-30T10:15:30");
+        Subtask sub8 = new Subtask(8, "sub8", "", 4, Status.NEW);
+        sub8.setStartTime("2022-04-25T10:15:30");
+        Subtask sub9 = new Subtask(9, "sub9", "", 6, Status.NEW);
+        sub9.setStartTime("2022-04-21T10:15:30");
+
+        tm.addNewTask(mono1);
+        tm.addNewTask(mono2);
+        tm.addNewTask(mono3);
+        tm.addNewTask(epic4);
+        tm.addNewTask(epic5);
+        tm.addNewTask(epic6);
+        tm.addNewTask(sub7);
+        tm.addNewTask(sub8);
+        tm.addNewTask(sub9);
+
+        Set<Task> checklist = Set.of(mono3, mono1, epic6, epic4, mono2, epic5);
+
+        Assertions.assertEquals(checklist, tm.getPrioritizedTasks());
     }
 }
