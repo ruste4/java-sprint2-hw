@@ -26,6 +26,9 @@ public class Task implements Comparable<Task>{
     }
 
     public LocalDateTime getFinishTime() {
+        if (getStartTime() == null) {
+            return null;
+        }
         return getStartTime().plus(getDuration());
     }
 

@@ -4,7 +4,9 @@ import historymanagers.HistoryManager;
 import historymanagers.InMemoryHistoryManager;
 import tasks.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Predicate;
 
 public class BaseTaskManager implements TaskManager {
     private TreeSet<Task> tasks;
@@ -23,6 +25,47 @@ public class BaseTaskManager implements TaskManager {
         return tasks;
     }
 
+    /**
+     * Есть ли пересечение
+     *
+     * @return
+     * Если newTask не имеет startTime - вернет true.
+     * Если в промежутке вермени между newTaskStart и newTaskFinish находится taskStart или taskFinish - вернет false.
+     */
+    private final Predicate<Task> isNotIntersiction = newTask -> {
+        if (newTask.getStartTime() == null) {
+            return true;
+        }
+
+        LocalDateTime newTaskStart = newTask.getStartTime();
+        LocalDateTime newTaskFinish = newTask.getFinishTime();
+
+        for (Task task : tasks) {
+            if (task.getStartTime() == null) {
+                break;
+            }
+
+            LocalDateTime taskStart = task.getStartTime();
+            LocalDateTime taskFinish = task.getFinishTime();
+
+            if (newTaskStart.isBefore(taskStart) && newTaskFinish.isAfter(taskStart)) {
+                return false;
+            }
+
+            if (newTaskStart.isBefore(taskFinish) && newTaskFinish.isAfter(taskFinish)) {
+                return false;
+            }
+
+            if ((newTaskStart.isBefore(taskStart) && newTaskFinish.isBefore(taskStart)) &&
+                    (newTaskStart.isBefore(taskFinish) && newTaskFinish.isBefore(taskFinish))) {
+                break;
+            }
+
+        }
+
+        return true;
+    };
+
     @Override
     public boolean addNewTask(Task task) {
         if (task == null) {
@@ -31,6 +74,10 @@ public class BaseTaskManager implements TaskManager {
         int taskId = task.getId();
 
         if (findTaskById(taskId) != null) {
+            return false;
+        }
+
+        if (!isNotIntersiction.test(task)) {
             return false;
         }
 

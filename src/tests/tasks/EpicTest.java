@@ -37,15 +37,22 @@ public class EpicTest {
     }
 
     @Test
-    public void shouldBeDuration90minutsIfSubtaskDuration90minuts() {
+    public void shouldBeDuration120minuts() {
         Subtask subtask1 = taskGenerator.generateSubtask(epic.getId());
-        Subtask subtask2 = taskGenerator.generateSubtask(epic.getId());
-        Duration testDuration = Duration.ofMinutes(90);
+        subtask1.setStartTime("2022-03-13T10:15:30");
         subtask1.setDurationOfMinuts(60);
+
+        Subtask subtask2 = taskGenerator.generateSubtask(epic.getId());
+        subtask2.setStartTime("2022-03-13T12:15:30");
         subtask2.setDurationOfMinuts(30);
+
+        Duration testDuration = Duration.between(LocalDateTime.parse("2022-03-13T10:15:30"),
+                LocalDateTime.parse("2022-03-13T12:45:30"));
+
         epic.addSubtask(subtask1);
         epic.addSubtask(subtask2);
 
+        Duration see = epic.getDuration();
         Assertions.assertTrue(testDuration.equals(epic.getDuration()));
     }
 

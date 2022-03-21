@@ -256,4 +256,215 @@ public class BaseTaskManagerTest {
 
         Assertions.assertEquals(checklist, tm.getPrioritizedTasks());
     }
+
+
+    @Test
+    // должно быть успешное добавление задачи, если нет пересечения по вермени
+    public void shouldBeSuccessfullyAddingMonotaskWithNoTimeIntersection() {
+        EpicTask epic1 = new EpicTask(1, "Epic1", "");
+
+        Subtask sub1v1 = new Subtask(2, "Sub1v1", "", 1, Status.NEW);
+        sub1v1.setStartTime("2022-04-15T10:15:30");
+        sub1v1.setDurationOfMinuts(30);
+
+        Subtask sub2v1 = new Subtask(3, "Sub2v1", "", 1, Status.NEW);
+        sub2v1.setStartTime("2022-04-15T12:15:30");
+        sub2v1.setDurationOfMinuts(30);
+
+        Subtask sub3v1 = new Subtask(4, "Sub2v1", "", 1, Status.NEW);
+        sub3v1.setStartTime("2022-04-15T12:55:30");
+        sub3v1.setDurationOfMinuts(15);
+
+        MonoTask mono1 = new MonoTask(5, "Mono1", "", Status.NEW);
+        mono1.setStartTime("2022-03-15T12:55:30");
+        mono1.setDurationOfMinuts(25);
+
+        MonoTask mono2 = new MonoTask(6, "Mono2", "", Status.NEW);
+        mono2.setStartTime("2022-03-15T13:55:30");
+        mono2.setDurationOfMinuts(10);
+
+        MonoTask newMonotask = new MonoTask(7, "Mono3", "", Status.NEW);
+        newMonotask.setStartTime("2022-03-15T18:55:30");
+        newMonotask.setDurationOfMinuts(45);
+
+        tm.addNewTask(epic1);
+        tm.addNewTask(sub1v1);
+        tm.addNewTask(sub2v1);
+        tm.addNewTask(sub3v1);
+        tm.addNewTask(mono1);
+        tm.addNewTask(mono2);
+        tm.addNewTask(newMonotask);
+
+        Assertions.assertNotNull(tm.getTaskById(7));
+    }
+
+    @Test
+    public void shouldBeSuccessfullyAddingEpicWithNoTimeIntersection() {
+        EpicTask epic1 = new EpicTask(1, "Epic1", "");
+
+        Subtask sub1v1 = new Subtask(2, "Sub1v1", "", 1, Status.NEW);
+        sub1v1.setStartTime("2022-04-15T10:15:30");
+        sub1v1.setDurationOfMinuts(30);
+
+        Subtask sub2v1 = new Subtask(3, "Sub2v1", "", 1, Status.NEW);
+        sub2v1.setStartTime("2022-04-15T12:15:30");
+        sub2v1.setDurationOfMinuts(30);
+
+        Subtask sub3v1 = new Subtask(4, "Sub2v1", "", 1, Status.NEW);
+        sub3v1.setStartTime("2022-04-15T12:55:30");
+        sub3v1.setDurationOfMinuts(15);
+
+        MonoTask mono1 = new MonoTask(5, "Mono1", "", Status.NEW);
+        mono1.setStartTime("2022-03-15T12:55:30");
+        mono1.setDurationOfMinuts(25);
+
+        MonoTask mono2 = new MonoTask(6, "Mono2", "", Status.NEW);
+        mono2.setStartTime("2022-03-16T13:55:30");
+        mono2.setDurationOfMinuts(10);
+
+        EpicTask newEpic = new EpicTask(7, "newEpic", "");
+
+        Subtask subtask1vN = new Subtask(8, "subtaskForNewEpic", "", 7, Status.NEW);
+        subtask1vN.setStartTime("2022-03-15T13:25:30");
+        subtask1vN.setDurationOfMinuts(2);
+        Subtask subtask2vN = new Subtask(9, "subtaskForNewEpic", "", 7, Status.NEW);
+        subtask2vN.setStartTime("2022-03-15T13:30:30");
+        subtask2vN.setDurationOfMinuts(5);
+        Subtask subtask3vN = new Subtask(10, "subtaskForNewEpic", "", 7, Status.NEW);
+        subtask3vN.setStartTime("2022-03-15T13:30:30");
+        subtask3vN.setDurationOfMinuts(3);
+
+        newEpic.addSubtask(subtask1vN);
+        newEpic.addSubtask(subtask2vN);
+        newEpic.addSubtask(subtask3vN);
+
+        tm.addNewTask(epic1);
+        tm.addNewTask(sub1v1);
+        tm.addNewTask(sub2v1);
+        tm.addNewTask(sub3v1);
+        tm.addNewTask(mono1);
+        tm.addNewTask(mono2);
+        tm.addNewTask(newEpic);
+        Assertions.assertNotNull(tm.getTaskById(newEpic.getId()));
+    }
+
+    @Test
+    public void shouldBeSuccessfullyAddingSubtaskWithNoTimeIntersection() {
+        EpicTask epic1 = new EpicTask(1, "Epic1", "");
+
+        Subtask sub1v1 = new Subtask(2, "Sub1v1", "", 1, Status.NEW);
+        sub1v1.setStartTime("2022-04-15T10:15:30");
+        sub1v1.setDurationOfMinuts(30);
+
+        Subtask sub2v1 = new Subtask(3, "Sub2v1", "", 1, Status.NEW);
+        sub2v1.setStartTime("2022-04-15T12:15:30");
+        sub2v1.setDurationOfMinuts(30);
+
+        Subtask sub3v1 = new Subtask(4, "Sub2v1", "", 1, Status.NEW);
+        sub3v1.setStartTime("2022-04-15T12:55:30");
+        sub3v1.setDurationOfMinuts(15);
+
+        MonoTask mono1 = new MonoTask(5, "Mono1", "", Status.NEW);
+        mono1.setStartTime("2022-03-15T12:55:30");
+        mono1.setDurationOfMinuts(25);
+
+        MonoTask mono2 = new MonoTask(6, "Mono2", "", Status.NEW);
+        mono2.setStartTime("2022-03-16T13:55:30");
+        mono2.setDurationOfMinuts(10);
+
+        tm.addNewTask(epic1);
+        tm.addNewTask(sub1v1);
+        tm.addNewTask(sub2v1);
+        tm.addNewTask(sub3v1);
+        tm.addNewTask(mono1);
+        tm.addNewTask(mono2);
+
+        Subtask newSubtask = new Subtask(7, "NewSubtask by Epic1", "", 1 ,Status.NEW);
+        newSubtask.setStartTime("2022-03-16T13:57:30");
+        newSubtask.setDurationOfMinuts(1);
+
+        tm.addNewTask(newSubtask);
+
+        Assertions.assertNotNull(tm.getTaskById(newSubtask.getId()));
+
+    }
+
+    @Test
+    public void shouldBeUnsuccessfullyAddingSubtaskWithTimeIntersection() {
+        EpicTask epic1 = new EpicTask(1, "Epic1", "");
+
+        Subtask sub1v1 = new Subtask(2, "Sub1v1", "", 1, Status.NEW);
+        sub1v1.setStartTime("2022-04-15T10:15:30");
+        sub1v1.setDurationOfMinuts(30);
+
+        Subtask sub2v1 = new Subtask(3, "Sub2v1", "", 1, Status.NEW);
+        sub2v1.setStartTime("2022-04-15T12:15:30");
+        sub2v1.setDurationOfMinuts(30);
+
+        Subtask sub3v1 = new Subtask(4, "Sub2v1", "", 1, Status.NEW);
+        sub3v1.setStartTime("2022-04-15T12:55:30");
+        sub3v1.setDurationOfMinuts(15);
+
+        MonoTask mono1 = new MonoTask(5, "Mono1", "", Status.NEW);
+        mono1.setStartTime("2022-03-15T12:55:30");
+        mono1.setDurationOfMinuts(25);
+
+        MonoTask mono2 = new MonoTask(6, "Mono2", "", Status.NEW);
+        mono2.setStartTime("2022-03-16T13:55:30");
+        mono2.setDurationOfMinuts(10);
+
+        tm.addNewTask(epic1);
+        tm.addNewTask(sub1v1);
+        tm.addNewTask(sub2v1);
+        tm.addNewTask(sub3v1);
+        tm.addNewTask(mono1);
+        tm.addNewTask(mono2);
+
+        Subtask newSubtask = new Subtask(7, "NewSubtask by Epic1", "", 1 ,Status.NEW);
+        newSubtask.setStartTime("2022-03-16T13:57:30");
+        newSubtask.setDurationOfMinuts(10);
+
+        tm.addNewTask(newSubtask);
+
+        Assertions.assertNull(tm.getTaskById(newSubtask.getId()));
+    }
+
+    @Test
+    public void shouldBeUnsuccessfullyAddingMonotaskWithTimeIntersection() {
+        EpicTask epic1 = new EpicTask(1, "Epic1", "");
+
+        Subtask sub1v1 = new Subtask(2, "Sub1v1", "", 1, Status.NEW);
+        sub1v1.setStartTime("2022-04-15T10:15:30");
+        sub1v1.setDurationOfMinuts(30);
+
+        Subtask sub2v1 = new Subtask(3, "Sub2v1", "", 1, Status.NEW);
+        sub2v1.setStartTime("2022-04-15T12:15:30");
+        sub2v1.setDurationOfMinuts(30);
+
+        Subtask sub3v1 = new Subtask(4, "Sub2v1", "", 1, Status.NEW);
+        sub3v1.setStartTime("2022-04-15T12:55:30");
+        sub3v1.setDurationOfMinuts(15);
+
+        MonoTask mono1 = new MonoTask(5, "Mono1", "", Status.NEW);
+        mono1.setStartTime("2022-03-15T12:55:30");
+        mono1.setDurationOfMinuts(25);
+
+        MonoTask mono2 = new MonoTask(6, "Mono2", "", Status.NEW);
+        mono2.setStartTime("2022-03-15T13:55:30");
+        mono2.setDurationOfMinuts(10);
+
+        MonoTask newMonotask = new MonoTask(7, "Mono3", "", Status.NEW);
+        newMonotask.setStartTime("2022-03-15T13:55:30");
+        newMonotask.setDurationOfMinuts(45);
+
+        tm.addNewTask(epic1);
+        tm.addNewTask(sub1v1);
+        tm.addNewTask(sub2v1);
+        tm.addNewTask(sub3v1);
+        tm.addNewTask(mono1);
+        tm.addNewTask(mono2);
+        tm.addNewTask(newMonotask);
+
+        Assertions.assertNull(tm.getTaskById(7));
+    }
 }

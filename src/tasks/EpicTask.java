@@ -31,12 +31,19 @@ public class EpicTask extends Task {
 
     @Override
     public Duration getDuration() {
-        Duration result = Duration.ZERO;
-        for (Subtask subtask : subtasks.values()) {
-            result = result.plus(subtask.getDuration());
+        if (getStartTime() == null) {
+            return Duration.ZERO;
         }
-
-        return result;
+        LocalDateTime lastSubtaskFinish = LocalDateTime.MIN;
+        for (Subtask subtask : getSubtasks().values()) {
+            if (subtask.getStartTime() == null) {
+                break;
+            }
+            if (subtask.getFinishTime().isAfter(lastSubtaskFinish)) {
+                lastSubtaskFinish = subtask.getFinishTime();
+            }
+        }
+        return Duration.between(getStartTime(), lastSubtaskFinish);
     }
 
     @Override
