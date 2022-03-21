@@ -105,4 +105,24 @@ public class EpicTest {
         Assertions.assertEquals(Status.IN_PROGRESS, epic.getStatus());
     }
 
+    @Test
+    public void shouldBeFinishTime1HoursMoreByAdd2SubtaskDuration30minuts() {
+        EpicTask epic = taskGenerator.generateEpicTask();
+
+        Subtask sub1 = taskGenerator.generateSubtask(epic.getId());
+        sub1.setStartTime("2022-04-13T10:15:30");
+        sub1.setDurationOfMinuts(30);
+
+        Subtask sub2 = taskGenerator.generateSubtask(epic.getId());
+        sub2.setStartTime("2022-04-13T10:45:30");
+        sub2.setDurationOfMinuts(30);
+
+        epic.addSubtask(sub1);
+        epic.addSubtask(sub2);
+
+        LocalDateTime ctrlFinishTime = LocalDateTime.parse("2022-04-13T11:15:30");
+
+        Assertions.assertTrue(epic.getFinishTime().equals(ctrlFinishTime));
+    }
+
 }

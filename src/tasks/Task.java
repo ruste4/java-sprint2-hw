@@ -25,6 +25,10 @@ public class Task implements Comparable<Task>{
         return startTime;
     }
 
+    public LocalDateTime getFinishTime() {
+        return getStartTime().plus(getDuration());
+    }
+
     public void setDurationOfMinuts(long durationOfMinuts) {
         this.duration = Duration.ofMinutes(durationOfMinuts);
     }
