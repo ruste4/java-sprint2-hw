@@ -4,17 +4,27 @@ import components.LinkedListByHistoryManager;
 import components.Node;
 import generators.TaskGenerator;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import tasks.Task;
 
 import java.util.ArrayList;
 
 class LinkedListByHistoryManagerTest {
-    TaskGenerator taskGenerator = new TaskGenerator();
-    Task monotask1 = taskGenerator.generateMonotask();
-    Task monotask2 = taskGenerator.generateMonotask();
-    Task monotask3 = taskGenerator.generateMonotask();
-    Task monotask4 = taskGenerator.generateMonotask();
+    private static TaskGenerator taskGenerator ;
+    private static Task monotask1;
+    private static Task monotask2;
+    private static Task monotask3;
+    private static Task monotask4;
+
+    @BeforeAll
+    public static void beforeAll() {
+        taskGenerator = new TaskGenerator();
+        monotask1 = taskGenerator.generateMonotask();
+        monotask2 = taskGenerator.generateMonotask();
+        monotask3 = taskGenerator.generateMonotask();
+        monotask4 = taskGenerator.generateMonotask();
+    }
 
     @Test
     void linkLast() {

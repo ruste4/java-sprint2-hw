@@ -13,8 +13,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class EpicTest {
-    private static EpicTask epic;
-    private static TaskGenerator taskGenerator = new TaskGenerator();
+    private EpicTask epic;
+    private TaskGenerator taskGenerator = new TaskGenerator();
 
     @BeforeEach
     public void beforeEach() {

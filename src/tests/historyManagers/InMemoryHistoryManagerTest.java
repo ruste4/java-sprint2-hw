@@ -4,18 +4,29 @@ import generators.TaskGenerator;
 import historymanagers.HistoryManager;
 import historymanagers.InMemoryHistoryManager;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import tasks.Task;
 
 import java.util.ArrayList;
 
 class InMemoryHistoryManagerTest {
-    TaskGenerator taskGenerator = new TaskGenerator();
-    Task monotask = taskGenerator.generateMonotask();
-    Task epic = taskGenerator.generateEpicTask();
-    Task epic1 = taskGenerator.generateEpicTask();
-    Task subtask = taskGenerator.generateSubtask(epic.getId());
-    Task subtask1 = taskGenerator.generateSubtask(epic.getId());
+    private static TaskGenerator taskGenerator;
+    private static Task monotask;
+    private static Task epic;
+    private static Task epic1;
+    private static Task subtask;
+    private static Task subtask1;
+
+    @BeforeAll
+    public static void beforeAll() {
+        taskGenerator = new TaskGenerator();
+        monotask = taskGenerator.generateMonotask();
+        epic = taskGenerator.generateEpicTask();
+        epic1 = taskGenerator.generateEpicTask();
+        subtask = taskGenerator.generateSubtask(epic.getId());
+        subtask1 = taskGenerator.generateSubtask(epic.getId());
+    }
 
     @Test
     void add() {

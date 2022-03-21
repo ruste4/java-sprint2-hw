@@ -28,10 +28,11 @@ class FileBackedTasksManagerTest  extends BaseTaskManagerTest {
         managerForSave.getTaskById(1);
 
         FileBackedTasksManager managerForLoadTasks = FileBackedTasksManager.loadFromFile(file);
-
-        Assertions.assertEquals(managerForSave.getAllEpics(), managerForLoadTasks.getAllEpics());
-        Assertions.assertEquals(managerForSave.getAllMonotask(), managerForLoadTasks.getAllMonotask());
-        Assertions.assertEquals(managerForSave.history(), managerForLoadTasks.history());
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(managerForSave.getAllEpics(), managerForLoadTasks.getAllEpics()),
+                () -> Assertions.assertEquals(managerForSave.getAllMonotask(), managerForLoadTasks.getAllMonotask()),
+                () -> Assertions.assertEquals(managerForSave.history(), managerForLoadTasks.history())
+        );
     }
 
     @Test
