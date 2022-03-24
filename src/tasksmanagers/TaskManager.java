@@ -10,6 +10,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public interface TaskManager {
+    //todo Допиши документацию для метода
+    TreeSet<Task> getPrioritizedTasks();
+
     /**
      * Добавить новую задачу
      *

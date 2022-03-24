@@ -1,17 +1,15 @@
 import generators.TaskGenerator;
+import server.HttpTaskServer;
 import tasks.EpicTask;
 import tasks.MonoTask;
 import tasks.Subtask;
 
-public class Main {
-    public static void main(String[] args) {
-        TaskGenerator tg = new TaskGenerator();
-        MonoTask monotask = tg.generateMonotask();
-        EpicTask epicTask = tg.generateEpicTask();
-        Subtask subtask = tg.generateSubtask(epicTask.getId());
+import java.io.IOException;
 
-        System.out.println(monotask);
-        System.out.println(epicTask);
-        System.out.println(subtask);
+public class Main {
+    private static HttpTaskServer server = new HttpTaskServer();
+
+    public static void main(String[] args) throws IOException {
+        server.start();
     }
 }
