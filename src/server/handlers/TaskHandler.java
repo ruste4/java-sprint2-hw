@@ -30,7 +30,7 @@ public class TaskHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) {
-        String response = null;
+        String response = "";
         int statusCode = 200;
 
         try {
@@ -47,7 +47,7 @@ public class TaskHandler implements HttpHandler {
                     handleDeleteTaskRequest(httpExchange);
                     break;
                 default:
-                    throw new RequestException("Метод " + method + "не поддерживается");
+                    throw new RequestException("Метод " + method + " не поддерживается");
             }
 
         } catch (IllegalHeaderException | RequestException | TaskException e) {
@@ -57,9 +57,11 @@ public class TaskHandler implements HttpHandler {
             response = gson.toJson(e);
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            handlerResponse(httpExchange, response, statusCode);
         }
 
-        handlerResponse(httpExchange, response, statusCode);
+
     }
 
     private void handlerResponse(HttpExchange httpExchange, String response, int statusCode) {

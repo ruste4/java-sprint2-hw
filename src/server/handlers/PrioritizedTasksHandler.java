@@ -10,16 +10,17 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-public class HistoryHandler implements HttpHandler {
+public class PrioritizedTasksHandler implements HttpHandler {
     private TaskManager taskManager;
     private Gson gson;
 
-    public HistoryHandler(TaskManager taskManager, Gson gson) {
+    public PrioritizedTasksHandler(TaskManager taskManager, Gson gson) {
         this.taskManager = taskManager;
         this.gson = gson;
     }
+
     @Override
-    public void handle(HttpExchange httpExchange) throws IOException {
+    public void handle(HttpExchange httpExchange) {
         String response = "";
         int statusCode = 200;
 
@@ -28,7 +29,7 @@ public class HistoryHandler implements HttpHandler {
 
             switch (method) {
                 case "GET":
-                    response = handleGetHistoryRequest();
+                    response = handleGetPrioritizedTasksRequest(httpExchange);
                     break;
                 default:
                     throw new RequestException("Метод " + method + " не поддерживается");
@@ -42,10 +43,11 @@ public class HistoryHandler implements HttpHandler {
         } finally {
             handlerResponse(httpExchange, response, statusCode);
         }
+
     }
 
-    private String handleGetHistoryRequest() {
-        return gson.toJson(taskManager.history());
+    private String handleGetPrioritizedTasksRequest(HttpExchange httpExchange) {
+        return gson.toJson(taskManager.getPrioritizedTasks());
     }
 
     private void handlerResponse(HttpExchange httpExchange, String response, int statusCode) {
