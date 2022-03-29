@@ -3,7 +3,8 @@ package server;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpServer;
-import server.endpoints.TaskHandler;
+import server.handlers.HistoryHandler;
+import server.handlers.TaskHandler;
 import server.exceptions.RequestException;
 import server.exceptions.TaskException;
 import server.typeAdapters.DurationAdapter;
@@ -36,6 +37,7 @@ public class HttpTaskServer {
     public void start() throws IOException {
         HttpServer httpServer = HttpServer.create(new InetSocketAddress(8080), 0);
         httpServer.createContext("/tasks/task", new TaskHandler(taskManager, gson));
+        httpServer.createContext("/tasks/history", new HistoryHandler(taskManager, gson));
         httpServer.start();
     }
 }

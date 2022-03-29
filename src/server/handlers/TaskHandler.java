@@ -1,4 +1,4 @@
-package server.endpoints;
+package server.handlers;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -43,7 +43,11 @@ public class TaskHandler implements HttpHandler {
                 case "POST":
                     handlePostTaskRequest(httpExchange);
                     break;
+                case "Delete":
+                    handleDeleteTaskRequest(httpExchange);
+                    break;
                 default:
+                    throw new RequestException("Метод " + method + "не поддерживается");
             }
 
         } catch (IllegalHeaderException | RequestException | TaskException e) {
@@ -68,6 +72,33 @@ public class TaskHandler implements HttpHandler {
     }
 
     /**
+     * Спарсить json в задачу
+     * @param body
+     * @return
+     * @throws RequestException
+     * выбросится, если содержимое тела не поддерживает синтаксис json
+     * или если в переменной "type" указан неправельный тип задачи
+     */
+    private Task parseJsonToTask(String body) throws RequestException {
+        JsonElement jsonElement = JsonParser.parseString(body);
+        if (!jsonElement.isJsonObject()) {
+            throw new RequestException("Содерживое тела не является json обектом");
+        }
+
+        String type = jsonElement.getAsJsonObject().get("type").getAsString();
+
+        switch (type) {
+            case "MONOTASK":
+                return gson.fromJson(body, MonoTask.class);
+            case "SUBTASK":
+                return gson.fromJson(body, Subtask.class);
+            case "EPIC":
+                return gson.fromJson(body, EpicTask.class);
+            default:
+                throw new RequestException("Unchecked case " + type);
+        }
+    }
+    /**
      * Обработать GET запроса задач
      *
      * @param httpExchange
@@ -78,8 +109,14 @@ public class TaskHandler implements HttpHandler {
     private String handleGetTaskRequest(HttpExchange httpExchange) throws TaskException, RequestException {
         String response = "";
         URI uri = httpExchange.getRequestURI();
-        OptionalInt id = QueryParamGetter.getIdValueFromQuery(uri);
+        String query = httpExchange.getRequestURI().getQuery();
+        OptionalInt id;
 
+        if (query == null) {
+            return gson.toJson(taskManager.getAllMonotask());
+        }
+
+        id = QueryParamGetter.getIdValueFromQuery(uri);
         if (id.isPresent()) {
             Task task = taskManager.getTaskById(id.getAsInt());
             if (task == null) {
@@ -133,33 +170,23 @@ public class TaskHandler implements HttpHandler {
         }
     }
 
-
-
     /**
-     * Спарсить json в задачу
-     * @param body
-     * @return
-     * @throws RequestException
-     * выбросится, если содержимое тела не поддерживает синтаксис json
-     * или если в переменной "type" указан неправельный тип задачи
+     * Обработать DELETE запрос для задач
+     * @param httpExchange
+     * @throws TaskException
+     * если, задачи с переданным id нет в репозитории
      */
-    private Task parseJsonToTask(String body) throws RequestException {
-        JsonElement jsonElement = JsonParser.parseString(body);
-        if (!jsonElement.isJsonObject()) {
-            throw new RequestException("Содерживое тела не является json обектом");
-        }
+    private void handleDeleteTaskRequest(HttpExchange httpExchange) throws TaskException{
+        URI uri = httpExchange.getRequestURI();
+        OptionalInt id = QueryParamGetter.getIdValueFromQuery(uri);
 
-        String type = jsonElement.getAsJsonObject().get("type").getAsString();
-
-        switch (type) {
-            case "MONOTASK":
-                return gson.fromJson(body, MonoTask.class);
-            case "SUBTASK":
-                return gson.fromJson(body, Subtask.class);
-            case "EPIC":
-                return gson.fromJson(body, EpicTask.class);
-            default:
-                throw new RequestException("Unchecked case " + type);
+        if (id.isPresent()) {
+            boolean isDeleted = taskManager.removeTaskById(id.getAsInt());
+            if (!isDeleted) {
+                throw new TaskException("Задача с id=" + id.getAsInt() + " не найдена");
+            }
+        } else {
+            taskManager.removeAllTasks();
         }
     }
 }
