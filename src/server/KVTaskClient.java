@@ -17,6 +17,10 @@ public class KVTaskClient {
         this.keyApi = registration();
     }
 
+    public void setKeyApi(String keyApi) {
+        this.keyApi = keyApi;
+    }
+
     private String registration() {
         URI uri = URI.create(url + "register/");
         HttpRequest request = HttpRequest.newBuilder()

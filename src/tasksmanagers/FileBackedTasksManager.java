@@ -41,7 +41,7 @@ public class FileBackedTasksManager extends BaseTaskManager {
         return result;
     }
 
-    private boolean loadNewTask(Task task) {
+    protected boolean loadNewTask(Task task) {
         return super.addNewTask(task);
     }
 
@@ -84,7 +84,7 @@ public class FileBackedTasksManager extends BaseTaskManager {
      * Сохранить
      * Метод перезаписывает текущее состояние FileBackedTasksManager в файл.
      */
-    private void save() {
+    protected void save() {
         ArrayList<Task> tasks = new ArrayList<>();
         tasks.addAll(getAllMonotask());
         for (EpicTask epicTask : getAllEpics()) {
