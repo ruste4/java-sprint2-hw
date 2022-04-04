@@ -4,12 +4,7 @@ import java.io.File;
 
 public class Managers {
     public static TaskManager getDefault() {
-        return new InMemoryTasksManager();
+        return new HTTPTaskManager("http://localhost:8078/");
     }
-    public static TaskManager getFileBackedTasksManager() {
-        //todo Исправь на нормальный вид, согласно ТЗ
-        String testFilePath = "src/tasksmanagers/taskSaveTest.csv";
-        File file = new File(testFilePath);
-        return FileBackedTasksManager.loadFromFile(file);
-    }
+
 }

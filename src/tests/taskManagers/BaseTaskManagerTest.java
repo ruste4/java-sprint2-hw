@@ -17,8 +17,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class BaseTaskManagerTest {
-    private static TaskGenerator tg;
-    private static BaseTaskManager tm;
+    private TaskGenerator tg;
+    private BaseTaskManager tm;
 
     @BeforeEach
     public void beforeEach() {

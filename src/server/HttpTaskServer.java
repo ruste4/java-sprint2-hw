@@ -24,7 +24,7 @@ public class HttpTaskServer {
     private Gson gson;
 
     public HttpTaskServer() {
-        this.taskManager = Managers.getFileBackedTasksManager();
+        this.taskManager = Managers.getDefault();
 
         this.gson = new GsonBuilder()
                 .registerTypeAdapter(Duration.class, new DurationAdapter())

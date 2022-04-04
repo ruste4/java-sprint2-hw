@@ -21,7 +21,6 @@ public class KVServer {
         server = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
         server.createContext("/register", (h) -> {
             try {
-                System.out.println("\n/register");
                 switch (h.getRequestMethod()) {
                     case "GET":
                         sendText(h, API_KEY);
@@ -36,7 +35,6 @@ public class KVServer {
         });
         server.createContext("/save", (h) -> {
             try {
-                System.out.println("\n/save");
                 if (!hasAuth(h)) {
                     System.out.println("Запрос неавторизован, нужен параметр в query API_KEY со значением апи-ключа");
                     h.sendResponseHeaders(403, 0);
@@ -70,8 +68,6 @@ public class KVServer {
         });
         server.createContext("/load", (h) -> {
             try{
-                System.out.println("\n/load");
-
                 if (!hasAuth(h)) {
                     System.out.println("Запрос неавторизован, нужен параметр в query API_KEY со значением апи-ключа");
                     h.sendResponseHeaders(403, 0);
@@ -110,6 +106,10 @@ public class KVServer {
         System.out.println("Открой в браузере http://localhost:" + PORT + "/");
         System.out.println("API_KEY: " + API_KEY);
         server.start();
+    }
+
+    public void stop() {
+        server.stop(1);
     }
 
     private String generateApiKey() {

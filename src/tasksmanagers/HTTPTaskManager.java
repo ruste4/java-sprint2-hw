@@ -1,6 +1,7 @@
 package tasksmanagers;
 
 import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 import historymanagers.HistoryManager;
 import historymanagers.InMemoryHistoryManager;
 import server.KVTaskClient;
@@ -11,7 +12,6 @@ import server.typeAdapters.ExceptionAdapter;
 import server.typeAdapters.LocalDateTimeAdapter;
 import tasks.*;
 
-import java.lang.reflect.Type;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ public class HTTPTaskManager extends FileBackedTasksManager {
         String tasksJson = kvTaskClient.load("tasks");
         String historyJson = kvTaskClient.load("history");
 
-        ArrayList<Task> tasks = parseTasksJsonToTasksList(tasksJson);
+        ArrayList<Task> tasks =  parseTasksJsonToTasksList(tasksJson);
         ArrayList<Task> history = parseTasksJsonToTasksList(historyJson);
 
         HistoryManager historyManager = new InMemoryHistoryManager();
