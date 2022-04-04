@@ -18,8 +18,9 @@ public class HistoryHandler implements HttpHandler {
         this.taskManager = taskManager;
         this.gson = gson;
     }
+
     @Override
-    public void handle(HttpExchange httpExchange) throws IOException {
+    public void handle(HttpExchange httpExchange) {
         String response = "";
         int statusCode = 200;
 
@@ -36,7 +37,6 @@ public class HistoryHandler implements HttpHandler {
 
         } catch (RequestException e) {
             e.printStackTrace();
-            System.out.println(e.toString());
             statusCode = 400;
             response = gson.toJson(e);
         } finally {

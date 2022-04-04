@@ -28,8 +28,7 @@ public class BaseTaskManager implements TaskManager {
     /**
      * Есть ли пересечение
      *
-     * @return
-     * Если newTask не имеет startTime - вернет true.
+     * @return Если newTask не имеет startTime - вернет true.
      * Если в промежутке вермени между newTaskStart и newTaskFinish находится taskStart или taskFinish - вернет false.
      */
     private final Predicate<Task> isNotIntersiction = newTask -> {

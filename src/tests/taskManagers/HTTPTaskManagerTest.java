@@ -14,12 +14,10 @@ import tasks.EpicTask;
 import tasks.MonoTask;
 import tasks.Subtask;
 import tasksmanagers.HTTPTaskManager;
-import tasksmanagers.TaskManager;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

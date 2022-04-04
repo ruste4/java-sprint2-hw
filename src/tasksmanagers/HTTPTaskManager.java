@@ -1,7 +1,6 @@
 package tasksmanagers;
 
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
 import historymanagers.HistoryManager;
 import historymanagers.InMemoryHistoryManager;
 import server.KVTaskClient;
@@ -41,7 +40,7 @@ public class HTTPTaskManager extends FileBackedTasksManager {
         String tasksJson = gson.toJson(tasks);
         String historyJson = gson.toJson(history());
 
-        kvTaskClient.put("tasks",tasksJson);
+        kvTaskClient.put("tasks", tasksJson);
         kvTaskClient.put("history", historyJson);
     }
 
@@ -51,12 +50,12 @@ public class HTTPTaskManager extends FileBackedTasksManager {
         String tasksJson = kvTaskClient.load("tasks");
         String historyJson = kvTaskClient.load("history");
 
-        ArrayList<Task> tasks =  parseTasksJsonToTasksList(tasksJson);
+        ArrayList<Task> tasks = parseTasksJsonToTasksList(tasksJson);
         ArrayList<Task> history = parseTasksJsonToTasksList(historyJson);
 
         HistoryManager historyManager = new InMemoryHistoryManager();
 
-        tasks.forEach(super:: loadNewTask);
+        tasks.forEach(super::loadNewTask);
         history.forEach(historyManager::add);
 
         setHistoryManager(historyManager);
@@ -68,7 +67,7 @@ public class HTTPTaskManager extends FileBackedTasksManager {
         JsonElement jsonElement = JsonParser.parseString(json);
         JsonArray jsonArray = jsonElement.getAsJsonArray();
 
-        for (JsonElement element: jsonArray) {
+        for (JsonElement element : jsonArray) {
 
             String type = element.getAsJsonObject().get("type").getAsString();
 

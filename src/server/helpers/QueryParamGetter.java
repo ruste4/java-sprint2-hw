@@ -5,7 +5,7 @@ import java.util.OptionalInt;
 
 public class QueryParamGetter {
     public static OptionalInt getIdValueFromQuery(URI uri) {
-        String[] params =  uri.getQuery().split("&");
+        String[] params = uri.getQuery().split("&");
 
         for (String param : params) {
             String name = param.split("=")[0];

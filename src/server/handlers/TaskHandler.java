@@ -75,11 +75,11 @@ public class TaskHandler implements HttpHandler {
 
     /**
      * Спарсить json в задачу
+     *
      * @param body
      * @return
-     * @throws RequestException
-     * выбросится, если содержимое тела не поддерживает синтаксис json
-     * или если в переменной "type" указан неправельный тип задачи
+     * @throws RequestException выбросится, если содержимое тела не поддерживает синтаксис json
+     *                          или если в переменной "type" указан неправельный тип задачи
      */
     private Task parseJsonToTask(String body) throws RequestException {
         JsonElement jsonElement = JsonParser.parseString(body);
@@ -100,6 +100,7 @@ public class TaskHandler implements HttpHandler {
                 throw new RequestException("Unchecked case " + type);
         }
     }
+
     /**
      * Обработать GET запроса задач
      *
@@ -135,15 +136,12 @@ public class TaskHandler implements HttpHandler {
 
     /**
      * Обработать POST запрос для задач
+     *
      * @param httpExchange
-     * @throws IllegalHeaderException
-     * если нет заголовка X-action, со значениями "create" или "update"
-     * @throws IOException
-     * генерирует InputStream.readAllBytes()
-     * @throws RequestException
-     * генерирует parseJsonToTask()
-     * @throws TaskException
-     * если не получилось добавить новую задачу или обновить старую
+     * @throws IllegalHeaderException если нет заголовка X-action, со значениями "create" или "update"
+     * @throws IOException            генерирует InputStream.readAllBytes()
+     * @throws RequestException       генерирует parseJsonToTask()
+     * @throws TaskException          если не получилось добавить новую задачу или обновить старую
      */
     private void handlePostTaskRequest(HttpExchange httpExchange) throws IllegalHeaderException, IOException,
             RequestException, TaskException {
@@ -174,11 +172,11 @@ public class TaskHandler implements HttpHandler {
 
     /**
      * Обработать DELETE запрос для задач
+     *
      * @param httpExchange
-     * @throws TaskException
-     * если, задачи с переданным id нет в репозитории
+     * @throws TaskException если, задачи с переданным id нет в репозитории
      */
-    private void handleDeleteTaskRequest(HttpExchange httpExchange) throws TaskException{
+    private void handleDeleteTaskRequest(HttpExchange httpExchange) throws TaskException {
         URI uri = httpExchange.getRequestURI();
         OptionalInt id = QueryParamGetter.getIdValueFromQuery(uri);
 

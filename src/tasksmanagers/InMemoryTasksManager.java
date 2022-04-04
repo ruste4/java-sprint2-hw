@@ -1,4 +1,4 @@
 package tasksmanagers;
 
-public class InMemoryTasksManager extends BaseTaskManager{
+public class InMemoryTasksManager extends BaseTaskManager {
 }

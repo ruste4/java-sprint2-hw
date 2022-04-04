@@ -29,7 +29,7 @@ public class PrioritizedTasksHandler implements HttpHandler {
 
             switch (method) {
                 case "GET":
-                    response = handleGetPrioritizedTasksRequest(httpExchange);
+                    response = handleGetPrioritizedTasksRequest();
                     break;
                 default:
                     throw new RequestException("Метод " + method + " не поддерживается");
@@ -37,7 +37,6 @@ public class PrioritizedTasksHandler implements HttpHandler {
 
         } catch (RequestException e) {
             e.printStackTrace();
-            System.out.println(e.toString());
             statusCode = 400;
             response = gson.toJson(e);
         } finally {
@@ -46,7 +45,7 @@ public class PrioritizedTasksHandler implements HttpHandler {
 
     }
 
-    private String handleGetPrioritizedTasksRequest(HttpExchange httpExchange) {
+    private String handleGetPrioritizedTasksRequest() {
         return gson.toJson(taskManager.getPrioritizedTasks());
     }
 

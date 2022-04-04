@@ -5,7 +5,6 @@ import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,7 +66,7 @@ public class KVServer {
             }
         });
         server.createContext("/load", (h) -> {
-            try{
+            try {
                 if (!hasAuth(h)) {
                     System.out.println("Запрос неавторизован, нужен параметр в query API_KEY со значением апи-ключа");
                     h.sendResponseHeaders(403, 0);
