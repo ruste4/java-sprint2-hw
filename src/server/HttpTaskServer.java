@@ -3,6 +3,7 @@ package server;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpServer;
+import server.exceptions.IllegalHeaderException;
 import server.handlers.HistoryHandler;
 import server.handlers.PrioritizedTasksHandler;
 import server.handlers.TaskHandler;
@@ -22,24 +23,31 @@ import java.time.LocalDateTime;
 public class HttpTaskServer {
     private TaskManager taskManager;
     private Gson gson;
+    HttpServer httpServer;
 
-    public HttpTaskServer() {
-        this.taskManager = Managers.getDefault();
+    public HttpTaskServer(TaskManager manager) throws IOException {
+        this.taskManager = manager;
 
         this.gson = new GsonBuilder()
                 .registerTypeAdapter(Duration.class, new DurationAdapter())
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                 .registerTypeAdapter(TaskException.class, new ExceptionAdapter())
                 .registerTypeAdapter(RequestException.class, new ExceptionAdapter())
+                .registerTypeAdapter(IllegalHeaderException.class, new ExceptionAdapter())
                 .setPrettyPrinting()
                 .create();
-    }
 
-    public void start() throws IOException {
-        HttpServer httpServer = HttpServer.create(new InetSocketAddress(8080), 0);
+        httpServer = HttpServer.create(new InetSocketAddress(8080), 0);
         httpServer.createContext("/tasks/task", new TaskHandler(taskManager, gson));
         httpServer.createContext("/tasks/history", new HistoryHandler(taskManager, gson));
         httpServer.createContext("/tasks/", new PrioritizedTasksHandler(taskManager, gson));
+    }
+
+    public void start() {
         httpServer.start();
+    }
+
+    public void stop() {
+        httpServer.stop(1);
     }
 }
