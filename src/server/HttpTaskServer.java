@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 public class HttpTaskServer {
     private TaskManager taskManager;
     private Gson gson;
-    HttpServer httpServer;
+    private HttpServer httpServer;
 
     public HttpTaskServer(TaskManager manager) throws IOException {
         this.taskManager = manager;

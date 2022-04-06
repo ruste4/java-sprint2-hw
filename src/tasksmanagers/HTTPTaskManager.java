@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class HTTPTaskManager extends FileBackedTasksManager {
-    KVTaskClient kvTaskClient;
-    Gson gson;
+    private KVTaskClient kvTaskClient;
+    private Gson gson;
 
     public HTTPTaskManager(String url) {
         this.kvTaskClient = new KVTaskClient(url);

@@ -22,10 +22,10 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HTTPTaskManagerTest extends FileBackedTasksManagerTest {
-    static KVServer kvServer;
-    HTTPTaskManager httpTaskManager;
-    static KVTaskClient kvTaskClient;
-    static Gson gson;
+    private static KVServer kvServer;
+    private HTTPTaskManager httpTaskManager;
+    private static KVTaskClient kvTaskClient;
+    private static Gson gson;
 
     @BeforeAll
     public static void beforeAllHTTPTaskManagerTests() {

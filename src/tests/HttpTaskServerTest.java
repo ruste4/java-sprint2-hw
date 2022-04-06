@@ -353,7 +353,7 @@ public class HttpTaskServerTest {
                 () -> assertEquals(jsonObject.get("status").getAsInt(), 400),
                 () -> assertEquals(
                         jsonObject.get("message").getAsString(),
-                        "Не получилось обновить задачу c id=888. Проверьте былали создана задача ранее и его " +
+                        "Не получилось обновить задачу c id=888. Проверьте была-ли создана задача ранее и его " +
                                 "совместимость с переданными полями "
                 )
         );

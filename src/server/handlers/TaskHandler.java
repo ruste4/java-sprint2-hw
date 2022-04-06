@@ -79,12 +79,12 @@ public class TaskHandler implements HttpHandler {
      * @param body
      * @return
      * @throws RequestException выбросится, если содержимое тела не поддерживает синтаксис json
-     *                          или если в переменной "type" указан неправельный тип задачи
+     *                          или если в переменной "type" указан неправильный тип задачи
      */
     private Task parseJsonToTask(String body) throws RequestException {
         JsonElement jsonElement = JsonParser.parseString(body);
         if (!jsonElement.isJsonObject()) {
-            throw new RequestException("Содерживое тела не является json обектом");
+            throw new RequestException("Содержимое тела не является json обектом");
         }
 
         String type = jsonElement.getAsJsonObject().get("type").getAsString();
@@ -165,7 +165,7 @@ public class TaskHandler implements HttpHandler {
             boolean isUpdated = taskManager.updateTask(task, task.getId());
             if (!isUpdated) {
                 throw new TaskException("Не получилось обновить задачу c id=" + task.getId() +
-                        ". Проверьте былали создана задача ранее и его совместимость с переданными полями ");
+                        ". Проверьте была-ли создана задача ранее и его совместимость с переданными полями ");
             }
         }
     }
