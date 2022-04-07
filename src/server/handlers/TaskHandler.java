@@ -165,7 +165,7 @@ public class TaskHandler implements HttpHandler {
             boolean isUpdated = taskManager.updateTask(task, task.getId());
             if (!isUpdated) {
                 throw new TaskException("Не получилось обновить задачу c id=" + task.getId() +
-                        ". Проверьте была-ли создана задача ранее и его совместимость с переданными полями ");
+                        ". Проверьте была ли создана задача ранее и его совместимость с переданными полями ");
             }
         }
     }
